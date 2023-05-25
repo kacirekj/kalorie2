@@ -1,7 +1,7 @@
 from sqlalchemy import delete, select
 from sqlalchemy.orm import Session
 
-from src.model import Day, Food, Entry, FoodServing
+from model import Day, Food, Entry, FoodServing
 from __main__ import scoped_factory
 
 

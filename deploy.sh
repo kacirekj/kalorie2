@@ -21,6 +21,7 @@ ssh -i $ssh_public_key $remote_server << HERE
 sudo lsof -i:$server_port -t | sudo xargs kill
 cd $target_folder/$project_name
 pip3 install -r requirements.txt
+cd srv
 python3 app.py
 HERE
 

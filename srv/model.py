@@ -7,7 +7,7 @@ from typing import List
 from sqlalchemy import String, ForeignKey
 from sqlalchemy.orm import declarative_base, relationship, Mapped, mapped_column
 
-from src.util import normalize
+from util import normalize
 
 Base = declarative_base()
 

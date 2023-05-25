@@ -1,9 +1,9 @@
 from flask import Flask, send_from_directory, request, redirect, url_for
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
-from src import initdb
-from src.constant import STATIC_FILE_SUFFIXES
-from src.util import CustomJSONEncoder
+import initdb
+from constant import STATIC_FILE_SUFFIXES, WEB_DIR
+from util import CustomJSONEncoder
 
 
 app = Flask(__name__, )
@@ -13,26 +13,26 @@ engine = create_engine("sqlite:///data/sqlite.db", echo=True)
 session_factory = sessionmaker(bind=engine)
 scoped_factory = scoped_session(session_factory)
 
-import src.rest
-import src.repository
+import rest
+import repository
 
 
 @app.route('/')
 def get_index():
-    return send_from_directory('', 'index.html')
+    return send_from_directory(WEB_DIR, 'index.html')
 
 
 @app.route('/<path:text>')
 def get_index_with(text: str):
     if text == '/':
-        return send_from_directory('', 'index.html')
+        return send_from_directory(WEB_DIR, 'index.html')
     elif text.startswith('/api'):
         pass
     elif text.endswith(STATIC_FILE_SUFFIXES):
         web_file = text.split('web/')[1]
-        return send_from_directory('', f'web/{web_file}')
+        return send_from_directory(WEB_DIR, web_file)
     else:
-        return send_from_directory('', 'index.html')  # Should have 404 not found
+        return send_from_directory(WEB_DIR, 'index.html')  # Should have 404 not found
 
 
 @app.teardown_request

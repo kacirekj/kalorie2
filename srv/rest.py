@@ -7,8 +7,8 @@ import jwt
 import requests
 from flask import request, send_file, redirect
 
-from src import repository
-from src.mapper import dict_to_foods, dict_to_entries, dicts_to_days
+import repository
+from mapper import dict_to_foods, dict_to_entries, dicts_to_days
 
 FILE = 'export_foods.csv'
 

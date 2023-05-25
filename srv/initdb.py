@@ -4,7 +4,7 @@ import json
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 
-from src.model import Food, Day, Entry, Base, Serving, FoodServing
+from model import Food, Day, Entry, Base, Serving, FoodServing
 
 id = 0
 date = datetime.date.today()

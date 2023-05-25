@@ -1,6 +1,6 @@
 import datetime
 
-from src.model import Day, Entry, Food, Serving, DayExport, FoodServing
+from model import Day, Entry, Food, Serving, DayExport, FoodServing
 
 
 def dict_to_serving(dic):
