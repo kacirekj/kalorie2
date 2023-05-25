@@ -1,0 +1,27 @@
+﻿Tag,Task name,Priority,Estimate [d],"Status [Progress, Done]",Description
+Account,Login via Facebook,,2,,
+Account,Login via Google,,2,,
+Account,Login via Apple,,2,,
+Foods,User can create new food,3,2,,
+Foods,User can clone not owning Food by modifying it,3,2,,
+Account,Foods added by Guest are cloned during Login,3,2,,
+Account,Diary Days added by Guest are cloned during Login,3,2,,
+Diary,Days are lazy loded,1,2,,
+Diary,Food Entries can be draged and droped,3,2,,
+Foods,Food contains pictures,3,2,,
+Data,Basic Foods are copied from SK database,1,2,,They will be slightly modified so nobody can tell source
+Data,Common foods are copied from Kaloricke Tabulky or My Fitness Pal,1,4,,They will be slightly modified so nobody can tell source
+Pricing,User can subcribe to Mohlty Payment,1,10,,
+Pricing,User can subcribe to Year Payment,1,3,,
+Legal,"Dislaimers for users, no responsibility for errors",1,3,,And protection for Data
+Activities,There is page with Activities,3,3,,
+Activities,Activity can be added to Diary,3,3,,But is question how - by food search?
+Account,User can delete Account and be forgotten,2,2,,
+Pricing,User can cancel Subscription,1,3,,
+Account,User can set what nutrients are displayed in Diary,1,2,,
+Account,User can set if wants to display Macronutriend ratio in Diary,1,1,,
+Account,User can set what dishes he wants to display,1,1,,And if noone then panel Option disappear
+Account,User can set Kcal/KJ,2,1,,
+Account,User can set Text height,1,1,,
+Foods,"Display Manufacturer name, and allow fulltext search in it",2,2,,"So when entering new food it will show up - like Madeta, Rio Mare, and will be more order"
+Foods,"When enetring new food, allow fulltext search for Food name field",2,1,,It could make it more convinient to add new food
