@@ -4,7 +4,7 @@ import json
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 
-from model import Food, Day, Entry, Base, Serving, FoodServing
+from model import Food, Day, Entry, Base, Serving, FoodServing, User
 
 id = 0
 date = datetime.date.today()
@@ -30,6 +30,10 @@ def init():
     Base.metadata.create_all(engine)
 
     with Session(engine) as session:
+        user0 = User(id=0, email='jurass17@seznam.cz')  # admin?
+
+        session.merge(user0)
+
         serving0 = Serving(id=0, name='', grams=1)
         serving1 = Serving(id=1, name='', grams=100)
         serving2 = Serving(id=2, name='Malé', grams=50)
@@ -46,13 +50,13 @@ def init():
         session.merge(serving5)
         session.merge(serving6)
 
-        mouka = Food(id=1, name='Mouka pšeničná', proteins=11, carbs=73, fats=1.5, calories=356)
-        vejce = Food(id=2, name='Vejce slepičí', proteins=12.4, carbs=1, fats=10.9, calories=151)
-        maso = Food(id=3, name='Kuřecí prsa syrová bez kůže', proteins=23.1, carbs=0, fats=1.5, calories=106)
-        mleko = Food(id=4, name='Mléko polotučné', proteins=3.4, carbs=4.9, fats=1.5, calories=47)
-        chleb = Food(id=5, name='Chléb konzumní kmínový', proteins=8, carbs=45, fats=1.1, calories=244)
-        tvaroh = Food(id=6, name='Tvaroh polotučný Milko', proteins=10, carbs=4, fats=3.8, calories=91)
-        ryze = Food(id=7, name='Rio Mare Insalatissime Tuňákový salát s kuskusem', proteins=10, carbs=9.5, fats=13, calories=300)
+        mouka = Food(id=1, name='Mouka pšeničná', proteins=11, carbs=73, fats=1.5, calories=356, user_id=0)
+        vejce = Food(id=2, name='Vejce slepičí', proteins=12.4, carbs=1, fats=10.9, calories=151, user_id=0)
+        maso = Food(id=3, name='Kuřecí prsa syrová bez kůže', proteins=23.1, carbs=0, fats=1.5, calories=106, user_id=0)
+        mleko = Food(id=4, name='Mléko polotučné', proteins=3.4, carbs=4.9, fats=1.5, calories=47, user_id=0)
+        chleb = Food(id=5, name='Chléb konzumní kmínový', proteins=8, carbs=45, fats=1.1, calories=244, user_id=0)
+        tvaroh = Food(id=6, name='Tvaroh polotučný Milko', proteins=10, carbs=4, fats=3.8, calories=91, user_id=0)
+        ryze = Food(id=7, name='Rio Mare Insalatissime Tuňákový salát s kuskusem', proteins=10, carbs=9.5, fats=13, calories=300, user_id=0)
 
         mouka = session.merge(mouka)
         vejce = session.merge(vejce)
@@ -107,7 +111,7 @@ def init():
         session.merge(fs18)
 
         for i in range(1, 10):
-            day0 = Day(id=i, date=get_date_and_decrement())
+            day0 = Day(id=i, date=get_date_and_decrement(), user_id=0)
             day0 = session.merge(day0)
 
             if i == 7:
@@ -193,11 +197,11 @@ def insert_kalori_tabulky():
 
     with Session(engine) as session:
         for dic in dicarr:
-            food = Food(**{**dic, 'servings': [FoodServing(serving_id=0), FoodServing(serving_id=1)]})
+            food = Food(**{**dic, 'servings': [FoodServing(serving_id=0), FoodServing(serving_id=1)]}, user_id=0)
             session.add(food)
         session.commit()
 
 
 if __name__ == '__main__':
     init()
-    insert_kalori_tabulky()
+    # insert_kalori_tabulky()

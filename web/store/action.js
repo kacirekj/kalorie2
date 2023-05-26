@@ -67,6 +67,10 @@ const methods = {
         const foundFood = await this.$connector.getFoods([id], null)
         console.log(foundFood)
         this.$mutator.upsertFood(foundFood[0])
+    },
+    async resetStoreAndFetchEverything() {
+        this.$store.
+        this.fetchDaysToStore()
     }
 }
 export default new Vue({methods})

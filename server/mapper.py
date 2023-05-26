@@ -40,6 +40,7 @@ def dict_to_food(**kwargs):
         fats=kwargs.get('fats'),
         calories=kwargs.get('calories'),
         servings=dict_to_food_servings(kwargs.get('servings')),
+        user_id=kwargs.get('user_id'),
     )
 
 
@@ -51,7 +52,8 @@ def dict_to_day(**kwargs):
     return Day(
         id=kwargs.get('id'),
         date=datetime.date.fromisoformat(kwargs.get('date')),
-        entries=dict_to_entries(kwargs.get('entries', []))
+        entries=dict_to_entries(kwargs.get('entries', [])),
+        user_id=kwargs.get('user_id')
     )
 
 

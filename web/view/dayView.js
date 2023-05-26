@@ -34,12 +34,15 @@ export default {
         async addDay() {
             const date = this.$util.getDateAsString(new Date());
             const addedDay = await this.$action.upsertDay({
-                date: date, entries: [],
+                date: date,
+                entries: [],
+                user_id: this.$util.getUserId()
             })
             addedDay.isEdit = true
         }
     },
     async mounted() {
         await this.$action.fetchDaysToStore()
+
     },
 }

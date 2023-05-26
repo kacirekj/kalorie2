@@ -2,16 +2,20 @@ from flask import Flask, send_from_directory, request, redirect, url_for
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 import initdb
-from constant import STATIC_FILE_SUFFIXES, WEB_DIR
+import util
+from constant import STATIC_FILE_SUFFIXES, WEB_DIR, DATA_DIR
 from util import CustomJSONEncoder
 
 
 app = Flask(__name__, )
 app.json_encoder = CustomJSONEncoder
+# app.config['JSON_SORT_KEYS'] = False
+# app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False
 
-engine = create_engine("sqlite:///data/sqlite.db", echo=True)
+engine = create_engine(f"sqlite:///{DATA_DIR}/sqlite.db", echo=True)
 session_factory = sessionmaker(bind=engine)
 scoped_factory = scoped_session(session_factory)
+
 
 import rest
 import repository

@@ -3,11 +3,11 @@ import dataclasses
 from __main__ import app
 from dataclasses import asdict
 
-import jwt
-import requests
-from flask import request, send_file, redirect
+from flask import request, send_file
 
 import repository
+import service
+import util
 from mapper import dict_to_foods, dict_to_entries, dicts_to_days
 
 FILE = 'export_foods.csv'
@@ -15,12 +15,20 @@ FILE = 'export_foods.csv'
 
 @app.get('/api/days')
 def get_days():
-    return [dataclasses.asdict(day) for day in repository.get_days()]
+    user_id = util.get_user_id()
+    return [dataclasses.asdict(day) for day in repository.get_days(user_id=user_id)]
 
 
 @app.post('/api/days')
 def post_days():
+    user_id = util.get_user_id()
     days = dicts_to_days(request.json)
+
+    # Auth
+    day_ids = [day.id for day in days]
+    all_days = repository.get_days(day_ids)
+    service.authorize(all_days, user_id)
+
     days = repository.upsert_days(days)
     result = [dataclasses.asdict(day) for day in days]
     return result
@@ -43,12 +51,22 @@ def post_entries():
 def get_foods():
     ids = request.args.getlist('ids[]')
     name_nrm_contains = request.args.getlist('name_nrm_contains[]')
-    return [asdict(food) for food in repository.get_foods(ids, name_nrm_contains)]
+    user_id = util.get_user_id()
+    pub_foods = repository.get_foods(ids, name_nrm_contains, visibility=0)
+    own_foods = repository.get_foods(ids, name_nrm_contains, user_id)
+    return [asdict(food) for food in [*pub_foods, *own_foods]]
 
 
 @app.post('/api/foods')
 def post_foods():
+    user_id = util.get_user_id()
     foods = dict_to_foods(request.json)
+
+    # Auth
+    food_ids = [food.id for food in foods]
+    all_foods = repository.get_foods(ids=food_ids)
+    service.authorize(all_foods, user_id)
+
     foods = repository.upsert_foods(foods)
     return [asdict(food) for food in foods]
 
@@ -75,13 +93,6 @@ def get_export_foods():
 def login():
     code = request.args.get('code')
     redirect_uri = request.args.get('redirect_uri')
-    resp = requests.post('https://login.szn.cz/api/v1/oauth/token', headers={'Accept': 'application/json'}, data={
-        "grant_type": "authorization_code",
-        "code": code,
-        "redirect_uri": redirect_uri,  # It contains / on end!
-        "client_secret": "e1aa3424867c522acb81c7e7d37cdb8fcbc8a889bf84718e",
-        "client_id": "d3759562806afe6d5e43b6e2508a49e11abfe112822fedb3"
-    })
-    resp = resp.json()
-    encoded_jwt = jwt.encode({'email': resp['account_name']}, 'ktabulky.cz@secret', algorithm='HS256')
-    return encoded_jwt
+    token = service.get_token(code, redirect_uri)
+    return token
+

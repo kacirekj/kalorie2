@@ -69,6 +69,7 @@ export default {
                     {food_id: null, serving: {id: 0, name: '', grams: 1}},
                     {food_id: null, serving: {id: 1, name: '', grams: 100}},
                 ],
+                user_id: this.$util.getUserId()
             })
             this.$router.push("/foods/" + newFood[0].id)
         }

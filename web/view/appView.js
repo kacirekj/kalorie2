@@ -47,7 +47,7 @@ export default {
         toggleTheme() {
             this.theme = this.theme === this.defaultTheme ? 'dark' : this.defaultTheme
         },
-        setToken() {
+        trySetToken() {
             const jwt = sessionStorage.getItem('token')
             if(!jwt) {
                 this.token = null
@@ -71,7 +71,14 @@ export default {
 
     },
     async mounted() {
-        setInterval(this.setToken.bind(this), 300) // let it run, it doesn§t cost anything
+        // Periodically check for token
+        setInterval(this.trySetToken.bind(this), 300) // let it run, it doesn't cost anything
+
+        // Set sessionId:
+        const sessionId = this.$util.getSessionId()
+        if(!sessionId) {
+            sessionStorage.setItem("sessionId", 'guest_' + this.$util.getRandomStr())
+        }
     },
     created() {
         const theme = sessionStorage.getItem("theme")

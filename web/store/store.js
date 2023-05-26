@@ -35,9 +35,20 @@ const computed = {
         return data.foods.filter(f => food_ids.includes(f.id))
     },
 }
+
+const dateClone = JSON.parse(JSON.stringify(data))
+const methods = {
+    reset() {
+        data.alreadySearchedTerms = []
+        data.foods = []
+        data.days = []
+        data.searchTermFood = ''
+    }
+}
 export default new Vue({
     data() {
         return data
     },
-    computed
+    computed,
+    methods
 })
