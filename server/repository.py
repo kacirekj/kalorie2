@@ -5,13 +5,17 @@ from model import Day, Food, Entry, FoodServing, User
 from __main__ import scoped_factory
 
 
-def get_days(ids=None, user_id=None) -> list[Day]:
+def get_days(ids=None, user_id=None, date=None, not_id=None) -> list[Day]:
     session = scoped_factory()
     q = select(Day)
     if user_id is not None:
         q = q.where(Day.user_id == user_id)
     if ids:
         q = q.where(Day.id.in_(ids))
+    if date:
+        q = q.where(Day.date == date)
+    if not_id:
+        q = q.where(Day.id != not_id)
     return session.scalars(q).all()
 
 
@@ -19,8 +23,16 @@ def upsert_days(days: list[Day]):
     session = scoped_factory()
     fresh_days = []
     for day in days:
-        fresh_day = session.merge(day)
+        try:  # Prevent duplicities
+            exs_day = get_days(date=day.date, user_id=day.user_id, not_id=day.id)[0]
+            exs_day.merge(source=day)
+            fresh_day = session.merge(exs_day)
+            delete_day(day.id)
+        except:
+            fresh_day = session.merge(day)
+
         fresh_days.append(fresh_day)
+
     session.flush()
     return fresh_days
 

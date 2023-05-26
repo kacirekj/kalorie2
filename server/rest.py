@@ -4,6 +4,7 @@ from __main__ import app
 from dataclasses import asdict
 
 from flask import request, send_file
+from werkzeug.exceptions import Conflict
 
 import repository
 import service
@@ -28,6 +29,12 @@ def post_days():
     day_ids = [day.id for day in days]
     all_days = repository.get_days(day_ids)
     service.authorize(all_days, user_id)
+
+    # Validate Day Date doesn't exists
+    dates = [d for d in all_days]
+    for d in days:
+        if d.date in dates:
+            raise Conflict('Date already exists.')
 
     days = repository.upsert_days(days)
     result = [dataclasses.asdict(day) for day in days]

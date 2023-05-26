@@ -55,6 +55,9 @@ class Day(Base):
     entries: Mapped[List['Entry']] = relationship(lazy='selectin', cascade='all, delete-orphan')
     user_id: Mapped[int] = mapped_column(ForeignKey("user_table.id"), nullable=False)
 
+    def merge(self, source: 'Day'):
+        self.entries = [*self.entries, *source.entries]
+
 
 @dataclass
 class Entry(Base):

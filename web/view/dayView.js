@@ -32,13 +32,23 @@ export default {
     },
     methods: {
         async addDay() {
-            const date = this.$util.getDateAsString(new Date());
+            const today = new Date();
+            const date = new Date();
+            for(let i = 0; i < 100; i++) {
+                date.setDate(today.getDate() + i)
+                let dateStr = this.$util.getDateAsString(date)
+                if(!this.$store.days.find(d => d.date === dateStr)) {
+                    break
+                }
+                this.$logger.log('Date already exists. Increment.')
+            }
+
             const addedDay = await this.$action.upsertDay({
-                date: date,
+                date: this.$util.getDateAsString(date),
                 entries: [],
                 user_id: this.$util.getUserId()
             })
-            addedDay.isEdit = true
+            addedDay.isEdit = false
         }
     },
     async mounted() {
