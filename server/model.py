@@ -28,10 +28,16 @@ class Food(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     name: Mapped[str] = mapped_column(String(100), nullable=False)
     name_nrm: Mapped[str] = mapped_column(String(100), nullable=True)
+
     proteins: Mapped[int] = mapped_column(nullable=False)
-    carbs: Mapped[int] = mapped_column(nullable=False)
+    carbs: Mapped[int] = mapped_column(nullable=False)  # Usable carbs (not total carbs)
     fats: Mapped[int] = mapped_column(nullable=False)
     calories: Mapped[int] = mapped_column(nullable=False)
+    fiber: Mapped[int] = mapped_column(nullable=True)
+    salt: Mapped[int] = mapped_column(nullable=True)
+    sat_fats: Mapped[int] = mapped_column(nullable=True)
+    sugars: Mapped[int] = mapped_column(nullable=True)
+
     source: Mapped[str] = mapped_column(String(200), nullable=True)
     inactive: Mapped[bool] = mapped_column(nullable=True)
     servings: Mapped[List['FoodServing']] = relationship(lazy='joined')
@@ -83,6 +89,7 @@ class Serving(Base):
 class User(Base):
     __tablename__ = 'user_table'
     id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(nullable=True)
     email: Mapped[str] = mapped_column(nullable=True)
     created: Mapped[datetime.datetime] = mapped_column(nullable=True)
     last_visit: Mapped[datetime.datetime] = mapped_column(nullable=True)

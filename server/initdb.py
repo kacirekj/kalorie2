@@ -1,6 +1,6 @@
 import datetime
 import json
-
+import csv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 
@@ -30,7 +30,8 @@ def init():
     Base.metadata.create_all(engine)
 
     with Session(engine) as session:
-        user0 = User(id=0, email='jurass17@seznam.cz')  # admin?
+        user0 = User(id=0, email='jurass17@seznam.cz', name='Jiří K. Seznam.cz')  # admin?
+        user1 = User(id=1, email='', name='Základní potraviny')  # admin?
 
         session.merge(user0)
 
@@ -202,6 +203,32 @@ def insert_kalori_tabulky():
         session.commit()
 
 
+def insert_nutri_databaze_cz():
+    engine = create_engine(sqlite, echo=False)
+    Base.metadata.create_all(engine)
+
+    with Session(engine) as session:
+        reader = csv.DictReader(open('../data/nutri_databaze_cz_v7.16.csv', 'r'))
+        for row in reader:
+            food = Food(
+                name=row[' OrigFdNm'].strip(),
+                carbs=row[' CHO [g]'],
+                proteins=row[' PROT [g]'],
+                fats=row[' FAT [g]'],
+                calories=row[' ENERC [kcal]'],
+                fiber=row[' FIBT [g]'],
+                salt=None,
+                sat_fats=row[' FASAT [g]'],
+                sugars=row[' SUGAR [g]'],
+                servings=[FoodServing(serving_id=0), FoodServing(serving_id=1)],
+                source='Na základě dat z NutriDatabaze.cz, verze 7.16, ÚZEI, Praha. http://www.nutridatabaze.cz',
+                user_id=0,
+            )
+            session.add(food)
+        session.commit()
+
+
 if __name__ == '__main__':
+    insert_nutri_databaze_cz()
     init()
     # insert_kalori_tabulky()
