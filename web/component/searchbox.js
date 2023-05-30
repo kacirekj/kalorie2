@@ -10,17 +10,18 @@ const template = `
                v-on:focus="isFocusOnInput = true"
                v-on:blur="isFocusOnInput = false"
         />
-        <div id="food-searchbox-items" class="card box-luminescent searchbox-items"
-             v-if="isShow"
-             v-on:mouseenter="isFocusOnDiv = true"
-             v-on:mouseleave="isFocusOnDiv = false"
-             v-on:mousedown="isFocusOnDiv = true"
-             v-on:click="!isNonClickable ? isFocusOnDiv = false : isFocusOnDiv = true"
-             v-bind:style="{cursor: 'pointer'}"
-        >
-            <slot>
-            </slot>
-        </div>
+        <transition name="fade">        
+            <div id="food-searchbox-items" key="abc" class="card box-luminescent searchbox-items"
+                 v-if="isShow"
+                 v-on:mouseenter="isFocusOnDiv = true"
+                 v-on:mouseleave="isFocusOnDiv = false"
+                 v-on:mousedown="isFocusOnDiv = true"
+                 v-on:click="!isNonClickable ? isFocusOnDiv = false : isFocusOnDiv = true"
+                 v-bind:style="{cursor: 'pointer'}">
+                <slot>
+                </slot>
+            </div>
+         </transition>
     </div>
 `
 export default {

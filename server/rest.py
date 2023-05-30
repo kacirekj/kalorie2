@@ -58,9 +58,10 @@ def post_entries():
 def get_foods():
     ids = request.args.getlist('ids[]')
     name_nrm_contains = request.args.getlist('name_nrm_contains[]')
+    show_popular = bool(request.args.get('show_popular'))
     user_id = util.get_user_id()
-    pub_foods = repository.get_foods(ids, name_nrm_contains, visibility=0)
-    own_foods = repository.get_foods(ids, name_nrm_contains, user_id)
+    pub_foods = repository.get_foods(ids, name_nrm_contains, visibility=0, show_popular=show_popular)
+    own_foods = repository.get_foods(ids, name_nrm_contains, user_id, show_popular=show_popular)
     return [asdict(food) for food in [*pub_foods, *own_foods]]
 
 

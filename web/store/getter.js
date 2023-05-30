@@ -4,17 +4,20 @@ const methods = {
         this.$action.fetchFoodWhereId(id)
         return this.$store.foodsById[id]
     },
-    searchFoods(searchTerm, useUsedFoodsOnly) {
+    searchFoods(searchTerm, useUsedFoodsOnly, omitInactiveFoods = true) {
         this.$logger.log(searchTerm)
 
-        if(searchTerm.length < this.$constant.SEARCH_T_MIN_LEN || useUsedFoodsOnly) {
-            return this.getFoodsWhereNameNrmContains(searchTerm, true)
-                .sort((a, b) => a.name.localeCompare(b.name));
+        let result
+        if (searchTerm.length < this.$constant.SEARCH_T_MIN_LEN || useUsedFoodsOnly) {
+            result = this.getFoodsWhereNameNrmContains(searchTerm, true)
+        } else {
+            this.$action.fetchFoodsWhereNameNrmContainsToStore(searchTerm) // Async! This method shall be used only in Computed!
+            result = this.getFoodsWhereNameNrmContains(searchTerm, false)
         }
 
-        this.$action.fetchFoodsWhereNameNrmContainsToStore(searchTerm)
-        return this.getFoodsWhereNameNrmContains(searchTerm, false)
-            .sort((a, b) => a.name.localeCompare(b.name));
+        return result
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .filter(f => omitInactiveFoods ? f.inactive !== true : true);
     },
     getFoodsWhereNameNrmContains(searchTerm, useUsedFoodsOnly) {
         this.$logger.log(searchTerm, useUsedFoodsOnly)

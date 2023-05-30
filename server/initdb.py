@@ -210,9 +210,13 @@ def insert_nutri_databaze_cz():
     with Session(engine) as session:
         reader = csv.DictReader(open('../data/nutri_databaze_cz_v7.16.csv', 'r'))
         for row in reader:
+            try:
+                carbs = float(row[' CHO [g]'])
+            except:
+                carbs = row[' CHOT [g]']
             food = Food(
                 name=row[' OrigFdNm'].strip(),
-                carbs=row[' CHO [g]'],
+                carbs=carbs,
                 proteins=row[' PROT [g]'],
                 fats=row[' FAT [g]'],
                 calories=row[' ENERC [kcal]'],
@@ -221,7 +225,7 @@ def insert_nutri_databaze_cz():
                 sat_fats=row[' FASAT [g]'],
                 sugars=row[' SUGAR [g]'],
                 servings=[FoodServing(serving_id=0), FoodServing(serving_id=1)],
-                source='Na základě dat z NutriDatabaze.cz, verze 7.16, ÚZEI, Praha. http://www.nutridatabaze.cz',
+                source='NutriDatabaze.cz, verze 7.16, ÚZEI',
                 user_id=0,
             )
             session.add(food)
@@ -229,6 +233,6 @@ def insert_nutri_databaze_cz():
 
 
 if __name__ == '__main__':
-    insert_nutri_databaze_cz()
     init()
+    insert_nutri_databaze_cz()
     # insert_kalori_tabulky()

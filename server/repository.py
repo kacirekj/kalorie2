@@ -41,13 +41,16 @@ def delete_day(id):
     scoped_factory().query(Day).where(Day.id.in_([id])).delete()
 
 
-def get_foods(ids: list = None, name_nrm_contains: list = None, user_id: int = None, visibility: int = None) -> list[Food]:
+def get_foods(ids: list = None, name_nrm_contains: list = None, user_id: int = None, visibility: int = None, show_popular: bool = None) -> list[Food]:
     q = select(Food)
     if ids:
         q = q.where(Food.id.in_(ids))
     if name_nrm_contains:
         for s in name_nrm_contains:
             q = q.where(Food.name_nrm.contains(s))
+    if show_popular:
+        subq = select(Entry.food_id).limit(10)
+        q = q.where(Food.id.in_(subq))
 
     # Auth
     if user_id is not None:

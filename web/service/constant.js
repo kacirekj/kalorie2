@@ -1,7 +1,7 @@
 import util from "./util.js";
 
 const constants = {
-    SEARCH_T_MIN_LEN: 5,
+    SEARCH_T_MIN_LEN: 3,
     FOOD_NAME_TRUNCATE: 63,
     FOOD_NAME_PADDING: null,
 }

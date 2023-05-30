@@ -17,7 +17,7 @@ const template = `
             <td class=""></td>
         </template>
         <template v-if="isEdit">
-            <td class="">{{ food.name }} <a class="fa-solid fa-magnifying-glass fa-2xs"><router-link to="/foods/' + food.id"></router-link></a> </td>
+            <td class="">{{ food.name }} <router-link class="fa-solid fa-magnifying-glass fa-2xs" :to="'/foods/' + food.id"></router-link></td>
             <td class="">
                 <span style="display: flex;">
                     <span style="width: 100%">

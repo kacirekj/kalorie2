@@ -1,14 +1,14 @@
 const template = `
     <div style="display: contents">
-   
+
         <header>
             <nav class="noprint sticky">
                 <ul>
                     <li><router-link to="/"><img style="height: 2em;" src="web/asset/favicon.png"></router-link></li>
                     <li><router-link class="nav-button" :class="{'nav-button-focus': $route.path == '/days'}" to="/days">Deník</router-link></li>
                     <li><router-link class="nav-button" :class="{'nav-button-focus': $route.path == '/foods'}" to="/foods">Potraviny</router-link></>
-                    <li><router-link class="nav-button" :class="{'nav-button-focus': $route.path == '/tools'}" to="/tools">Nástroje</router-link></li>
-                    <li><router-link class="nav-button" :class="{'nav-button-focus': $route.path == '/settings'}" to="/settings">Nastavení</router-link></li>
+<!--                    <li><router-link class="nav-button" :class="{'nav-button-focus': $route.path == '/tools'}" to="/tools">Nástroje</router-link></li>-->
+<!--                    <li><router-link class="nav-button" :class="{'nav-button-focus': $route.path == '/settings'}" to="/settings">Nastavení</router-link></li>-->
                     <li class="float-right sticky" style="padding-top: 1rem">
                         <template v-if="theme === 'light'">
                             <a class="nav-button fa-solid fa-moon fa-xs" v-on:click="toggleTheme"></a>
@@ -25,12 +25,16 @@ const template = `
             </nav>
         </header>
         <keep-alive>
-            <router-view></router-view>
+
+            <router-view>
+                </router-view>
         </keep-alive>
         <footer>
             <p>Copyright (c) Jiří Kačírek 2023</p>
         </footer>
+
     </div>
+
 `
 export default {
     template,

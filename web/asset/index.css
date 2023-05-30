@@ -479,7 +479,7 @@ textarea, input:not([type=range]), button, select {
     background-color: var(--cbg);
 }
 
-input, select {
+input:not([type=checkbox]), select {
     padding: 0.05rem 0 0 0.4rem;
     min-width: 4rem;
     height: 1.6rem;
@@ -822,3 +822,14 @@ table h2, table h3, table h4 {
     align-items: center;
 }
 
+
+
+
+
+
+.fade-enter-active, .fade-leave-active {
+    transition: opacity .25s
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
+    opacity: 0
+}

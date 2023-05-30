@@ -65,6 +65,7 @@ export default {
                 carbs: 0,
                 fats: 0,
                 calories: 0,
+                visibility: 0,
                 servings: [
                     {food_id: null, serving: {id: 0, name: '', grams: 1}},
                     {food_id: null, serving: {id: 1, name: '', grams: 100}},

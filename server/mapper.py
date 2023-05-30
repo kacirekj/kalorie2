@@ -38,9 +38,16 @@ def dict_to_food(**kwargs):
         proteins=kwargs.get('proteins'),
         carbs=kwargs.get('carbs'),
         fats=kwargs.get('fats'),
+        fiber=kwargs.get('fiber'),
+        salt=kwargs.get('salt'),
+        sat_fats=kwargs.get('sat_fats'),
+        sugars=kwargs.get('sugars'),
+        inactive=kwargs.get('inactive'),
         calories=kwargs.get('calories'),
         servings=dict_to_food_servings(kwargs.get('servings')),
         user_id=kwargs.get('user_id'),
+        visibility=kwargs.get('visibility'),
+        source=kwargs.get('source'),
     )
 
 
