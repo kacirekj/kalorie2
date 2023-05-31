@@ -69,6 +69,7 @@ class Day(Base):
 class Entry(Base):
     __tablename__ = 'entry_table'
     id: Mapped[int] = mapped_column(primary_key=True)
+    rank: Mapped[int] = mapped_column(nullable=True)  # This is the order number because User want to keep order
     amount: Mapped[int] = mapped_column(nullable=False)
     day_id: Mapped[int] = mapped_column(ForeignKey("day_table.id"))
     food_id: Mapped[int] = mapped_column(ForeignKey("food_table.id"), nullable=False)

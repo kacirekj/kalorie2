@@ -3,11 +3,10 @@ const template = `
         <div class="row">
             <div class="col-3">
                 <template v-if="!day.isEdit">
-                    <h2 key="asd" >{{day.date | czechDate}}</h2>
+                    <h2>{{day.date | czechDate}}</h2>
                 </template>
                 <template  v-else>
-                    <h2 key="ase"><input type="date" v-model="day.date"></h2>
-                    
+                    <h2><input type="date" v-model="date"></h2>
                 </template>
             </div>
             <div class="col" style="text-align: right; vertical-align: bottom">
@@ -132,7 +131,7 @@ export default {
                 this.$action.upsertDay(this.day)
             }
             this.day.isEdit = !this.day.isEdit
-        }
+        },
     },
     mounted() {
         console.log(this.$constant.SEZNAM_URL)

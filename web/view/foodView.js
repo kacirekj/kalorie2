@@ -60,7 +60,7 @@ export default {
     methods: {
         async addFood() {
             const newFood = await this.$action.upsertFood({
-                name: 'Nové',
+                name: 'Nová potravina',
                 proteins: 0,
                 carbs: 0,
                 fats: 0,

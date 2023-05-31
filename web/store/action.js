@@ -12,7 +12,7 @@ const methods = {
         return freshFoods
     },
     async upsertDay(day) {
-        this.$logger.log()
+        this.$logger.log(day)
         const freshDay = await this.$connector.upsertDays([day])
         return this.$mutator.upsertDay(freshDay[0])
     },
