@@ -32,10 +32,10 @@ export default {
     },
     methods: {
         async addDay() {
-            const today = new Date();
             const date = new Date();
+            date.setDate(date.getDate()-1)
             for(let i = 0; i < 100; i++) {
-                date.setDate(today.getDate() + i)
+                date.setDate(date.getDate()+1)
                 let dateStr = this.$util.getDateAsString(date)
                 if(!this.$store.days.find(d => d.date === dateStr)) {
                     break
