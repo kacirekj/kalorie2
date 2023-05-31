@@ -47,10 +47,10 @@ const template = `
                     </select>
                 </td>
                 <template v-if="Object.keys(entriesGroupByCourse).length > 1">
-                    <td>{{$util.mapDayToCalories(day) | roundNutri}}</td>
-                    <td>{{$util.mapDayToProteins(day) | roundNutri}}</td>
-                    <td>{{$util.mapDayToCarbs(day) | roundNutri}}</td>
-                    <td>{{$util.mapDayToFats(day) | roundNutri}}</td>
+                    <td>{{$util.mapEntriesToCalories(entriesGroupByCourse[course_id]) | roundNutri}}</td>
+                    <td>{{$util.mapEntriesToProteins(entriesGroupByCourse[course_id]) | roundNutri}}</td>
+                    <td>{{$util.mapEntriesToCarbs(entriesGroupByCourse[course_id]) | roundNutri}}</td>
+                    <td>{{$util.mapEntriesToFats(entriesGroupByCourse[course_id]) | roundNutri}}</td>
                 </template>
                 <template v-else>
                     <td>&nbsp</td>

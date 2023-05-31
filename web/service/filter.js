@@ -73,7 +73,10 @@ const filters = {
         return num_r0;
     },
     formatPercent(num) {
-        return Math.round(num * 1000) / 10
+        if(isNaN(num)) { // todo: There should be check in Util methods
+            return 0
+        }
+        return Math.round(num * 100) / 1
     }
 }
 export default filters

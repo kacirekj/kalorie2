@@ -74,19 +74,19 @@ const template = `
             <tr>
                 <td></td>
                 <td>Celkem:</td>
-                <td>{{$util.mapDayToCalories(day) | roundNutri}}</td>
-                <td>{{$util.mapDayToProteins(day) | roundNutri}}g</td>
-                <td>{{$util.mapDayToCarbs(day) | roundNutri}}g</td>
-                <td>{{$util.mapDayToFats(day) | roundNutri}}g</td>
+                <td>{{$util.mapEntriesToCalories(day.entries) | roundNutri}}</td>
+                <td>{{$util.mapEntriesToProteins(day.entries) | roundNutri}}<small>g</small></td>
+                <td>{{$util.mapEntriesToCarbs(day.entries) | roundNutri}}<small>g</small></td>
+                <td>{{$util.mapEntriesToFats(day.entries) | roundNutri}}<small>g</small></td>
                 <td></td>
             </tr>
             <tr>
                 <td></td>
                 <td>Poměr makroživin:</td>
                 <td></td>
-                <td>{{$util.mapDayToProteinsPercent(day) | formatPercent}}%</td>
-                <td>{{$util.mapDayToCarbsPercent(day) | formatPercent}}%</td>
-                <td>{{$util.mapDayToFatsPercent(day) | formatPercent}}%</td>
+                <td>{{$util.mapEntriesToProteinsPercent(day.entries) | formatPercent}}<small>%</small></td>
+                <td>{{$util.mapEntriesToCarbsPercent(day.entries) | formatPercent}}<small>%</small></td>
+                <td>{{$util.mapEntriesToFatsPercent(day.entries) | formatPercent}}<small>%</small></td>
                 <td></td>
             </tr>
             </tfoot>

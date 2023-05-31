@@ -1,33 +1,29 @@
 const methods = {
-    mapDayToCalories(day) {
+    mapEntriesToCalories(entries) {
         this.$logger.log()
-        return day.entries
-            .map(entry => this.mapEntryToCalories(entry))
+        return entries.map(entry => this.mapEntryToCalories(entry))
             .reduce((d, i) => d + i, 0);
     },
-    mapDayToProteins(day) {
-        return day.entries
-            .map(entry => this.mapEntryToProteins(entry))
+    mapEntriesToProteins(entries) {
+        return entries.map(entry => this.mapEntryToProteins(entry))
             .reduce((d, i) => d + i, 0);
     },
-    mapDayToCarbs(day) {
-        return day.entries
-            .map(entry => this.mapEntryToCarbs(entry))
+    mapEntriesToCarbs(entries) {
+        return entries.map(entry => this.mapEntryToCarbs(entry))
             .reduce((d, i) => d + i, 0);
     },
-    mapDayToFats(day) {
-        return day.entries
-            .map(entry => this.mapEntryToFats(entry))
+    mapEntriesToFats(entries) {
+        return entries.map(entry => this.mapEntryToFats(entry))
             .reduce((d, i) => d + i, 0);
     },
-    mapDayToFatsPercent(day) {
-        return this.mapDayToFats(day) * 9 / this.mapDayToCalories(day)
+    mapEntriesToFatsPercent(entries) {
+        return this.mapEntriesToFats(entries) * 9 / this.mapEntriesToCalories(entries)
     },
-    mapDayToProteinsPercent(day) {
-        return this.mapDayToProteins(day) * 4 / this.mapDayToCalories(day)
+    mapEntriesToProteinsPercent(entries) {
+        return this.mapEntriesToProteins(entries) * 4 / this.mapEntriesToCalories(entries)
     },
-    mapDayToCarbsPercent(day) {
-        return this.mapDayToCarbs(day) * 4 / this.mapDayToCalories(day)
+    mapEntriesToCarbsPercent(entries) {
+        return this.mapEntriesToCarbs(entries) * 4 / this.mapEntriesToCalories(entries)
     },
     mapEntryToCalories(entry, food, serving) {
         if (!food) {
