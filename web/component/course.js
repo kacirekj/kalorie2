@@ -34,7 +34,7 @@ const template = `
                             </tr>
                             </thead>
                             <tbody>
-                            <tr v-for="searchFood in searchResults" :key="searchFood.id" v-on:click="$mutator.upsertEntry(day, {amount: 100, serving_id: searchFood.servings[0].serving_id, food_id: searchFood.id, course_id: parseInt(selectedCourseId)}); searchTerm = ''">
+                            <tr v-for="searchFood in searchResults" :key="searchFood.id" v-on:click="upsertEntry(searchFood)">
                                 <td class="foodName">{{searchFood.name}}</td>
                                 <td class="foodEnergy">{{searchFood.calories}}</td>
                                 <td class="foodNutrient">{{searchFood.proteins}}</td>
@@ -109,6 +109,19 @@ export default {
             list = list.filter(it => it.id !== item.id) // First remove item
             list.splice(itemNewIndex, 0, item) // Add item on specific index
             list.forEach((en, i) => en.rank = i) // Reset Rank so Vue will re-Compute
+        },
+        upsertEntry(searchFood) {
+            this.$mutator.upsertEntry(
+                this.day,
+                {
+                    amount: 100,
+                    serving_id: searchFood.servings[0].serving_id,
+                    food_id: searchFood.id,
+                    course_id: parseInt(this.selectedCourseId)
+                }
+            );
+            this.searchTerm = ''
+            this.selectedCourseId = this.course_id // Set it back to origin
         }
     },
 }
