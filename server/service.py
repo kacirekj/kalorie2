@@ -10,10 +10,12 @@ from model import User
 
 
 def get_or_create_user(email):
-    user = repository.get_user(email)
-    if not user:
+    users: list = repository.get_users(email=email)
+    if not users:
         user = User(email=email, created=datetime.datetime.now())
         user = repository.upsert_user(user)
+    else:
+        user = users[0]
 
     # Update last visit
     user.last_visit = datetime.datetime.now()

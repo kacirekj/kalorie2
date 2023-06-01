@@ -1,9 +1,14 @@
 const template = `
     <div style="display: contents">
-            <tbody>
-            <template v-for="entry in entriesGroupByCourse[course_id]">
-                <entry v-bind:entry="entry" v-bind:day="day" v-bind:isEdit="day.isEdit" :key="entry.id"></entry>
-            </template>
+            <tbody v-if="!day.isEdit">
+                <template v-for="entry in entriesGroupByCourseOrderByRank">
+                    <entry v-bind:entry="entry" v-bind:day="day" v-bind:isEdit="day.isEdit" :key="entry.id"></entry>
+                </template>
+            </tbody>
+            <tbody v-else :key="day.date" is="draggable" tag="tbody" :group="'course' + day.id" :list="entriesGroupByCourseOrderByRank" @change="onDrag">
+                <template v-for="entry in entriesGroupByCourseOrderByRank">
+                    <entry v-bind:entry="entry" v-bind:day="day" v-bind:isEdit="day.isEdit" :key="entry.id"></entry>
+                </template>
             </tbody>
             <tfoot>
             <tr>
@@ -46,11 +51,11 @@ const template = `
                         <option v-for="[key, value] in Object.entries($store.courses)" :value="key">{{key | czechCourse}}</option>
                     </select>
                 </td>
-                <template v-if="Object.keys(entriesGroupByCourse).length > 1">
-                    <td>{{$util.mapEntriesToCalories(entriesGroupByCourse[course_id]) | roundNutri}}</td>
-                    <td>{{$util.mapEntriesToProteins(entriesGroupByCourse[course_id]) | roundNutri}}</td>
-                    <td>{{$util.mapEntriesToCarbs(entriesGroupByCourse[course_id]) | roundNutri}}</td>
-                    <td>{{$util.mapEntriesToFats(entriesGroupByCourse[course_id]) | roundNutri}}</td>
+                <template v-if="Object.keys(entriesGroupByCourseOrderByRank).length > 1">
+                    <td>{{$util.mapEntriesToCalories(entriesGroupByCourseOrderByRank) | roundNutri}}</td>
+                    <td>{{$util.mapEntriesToProteins(entriesGroupByCourseOrderByRank) | roundNutri}}</td>
+                    <td>{{$util.mapEntriesToCarbs(entriesGroupByCourseOrderByRank) | roundNutri}}</td>
+                    <td>{{$util.mapEntriesToFats(entriesGroupByCourseOrderByRank) | roundNutri}}</td>
                 </template>
                 <template v-else>
                     <td>&nbsp</td>
@@ -66,36 +71,44 @@ export default {
         return {
             searchTerm: '',
             selectedCourseId: this.course_id,
+            list: [],
         }
     },
     computed: {
         searchResults() {
             return this.$getter.searchFoods(this.searchTerm)
         },
-        entriesGroupByCourse() {
-            let courses = this.day.entries.map(e => e.course_id)
-
-            if (courses.length === 0) {
-                return {'0': []}
-            }
-
-            courses = [...new Set(courses)]
-            const result = {}
-            for (let course_id of courses) {
-                result[course_id] = this.day.entries.filter(e => e.course_id === course_id)
-            }
-            return result
+        entriesGroupByCourseOrderByRank() {
+            console.log('called')
+            return this.day.entries.filter(e => e.course_id == this.course_id)
+                .sort((a, b) => a.rank - b.rank)
         },
     },
     methods: {
         saveChanges() {
-            this.day.date = this.date // Prohibit wild chnages of position
+            this.day.date = this.date  // Prohibit wild chnages of position
             if (this.day.entries.length === 0) {
                 this.$action.deleteDay(this.day)
             } else {
                 this.$action.upsertDay(this.day)
             }
             this.day.isEdit = !this.day.isEdit
+        },
+        onDrag(event) {
+            this.$logger.log(event)
+            if (event.added) {
+                event.added.element.course_id = this.course_id
+                this.putItemOnNewIndexAndResetRank([...this.entriesGroupByCourseOrderByRank], event.added.element, event.added.newIndex)
+            } else if (event.removed) {
+                // Do nothing
+            } else if (event.moved) {
+                this.putItemOnNewIndexAndResetRank([...this.entriesGroupByCourseOrderByRank], event.moved.element, event.moved.newIndex)
+            }
+        },
+        putItemOnNewIndexAndResetRank(list, item, itemNewIndex) {
+            list = list.filter(it => it.id !== item.id) // First remove item
+            list.splice(itemNewIndex, 0, item) // Add item on specific index
+            list.forEach((en, i) => en.rank = i) // Reset Rank so Vue will re-Compute
         }
     },
 }

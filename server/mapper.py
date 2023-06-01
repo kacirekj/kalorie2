@@ -71,11 +71,12 @@ def dict_to_entries(arr):
 def dict_to_entry(**kwargs):
     return Entry(
         id=kwargs.get('id'),
+        rank=kwargs.get('rank'),
         food_id=kwargs.get('food_id'),
         amount=kwargs.get('amount'),
         day_id=kwargs.get('day_id'),
         serving_id=kwargs.get('serving_id'),
-        course_id=kwargs.get('course_id')
+        course_id=kwargs.get('course_id'),
     )
 
 

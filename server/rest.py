@@ -104,3 +104,9 @@ def login():
     token = service.get_token(code, redirect_uri)
     return token
 
+
+@app.get('/api/users')
+def get_users():
+    # Temporary unprotected todo
+    return [asdict(user) for user in repository.get_users()]
+

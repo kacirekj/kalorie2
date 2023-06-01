@@ -31,7 +31,7 @@ const template = `
             </div>
         </div>
       
-
+        
         <template v-for="(course_id, index) in Object.keys(entriesGroupByCourse)">
             <table class="day-table">
                 <colgroup>

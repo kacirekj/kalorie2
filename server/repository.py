@@ -87,9 +87,11 @@ def upsert_entry(entries: list[Entry]):
     return entries
 
 
-def get_user(email: str):
-    stmn = select(User).where(User.email == email.lower())
-    return scoped_factory().scalars(stmn).first()
+def get_users(email: str = None):
+    stmn = select(User)
+    if email:
+        stmn.where(User.email == email.lower())
+    return scoped_factory().scalars(stmn).all()
 
 
 def upsert_user(user: User):
