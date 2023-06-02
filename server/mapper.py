@@ -1,82 +1,111 @@
 import datetime
 
-from model import Day, Entry, Food, Serving, DayExport, FoodServing
+from model import Day, Entry, Food, Serving, DayExport, FoodServing, Dish, Ingredient
 
 
-def dict_to_serving(dic):
-    if dic is None:
+def to_serving(serving: dict):
+    if serving is None:
         return None
     return Serving(
-        id=dic.get('id'),
-        name=dic.get('name'),
-        grams=dic.get('grams'),
-        inactive=dic.get('inactive'),
+        id=serving.get('id'),
+        name=serving.get('name'),
+        grams=serving.get('grams'),
+        inactive=serving.get('inactive'),
     )
 
 
-def dict_to_food_servings(arr):
-    return [dict_to_food_serving(**food_serving) for food_serving in arr]
+def to_food_servings(servings: list[dict]):
+    return [to_food_serving(food_serving) for food_serving in servings]
 
 
-def dict_to_food_serving(**kwargs):
+def to_food_serving(food_serving: dict):
     return FoodServing(
-        id=kwargs.get('id'),
-        food_id=kwargs.get('food_id'),
-        serving_id=kwargs.get('serving_id'),
-        serving=dict_to_serving(kwargs.get('serving')),
+        id=food_serving.get('id'),
+        food_id=food_serving.get('food_id'),
+        serving_id=food_serving.get('serving_id'),
+        serving=to_serving(food_serving.get('serving')),
     )
 
 
-def dict_to_foods(arr):
-    return [dict_to_food(**food) for food in arr]
+def to_foods(foods: list[dict]):
+    return [to_food(food) for food in foods]
 
 
-def dict_to_food(**kwargs):
+def to_food(food: dict):
     return Food(
-        id=kwargs.get('id'),
-        name=kwargs.get('name'),
-        proteins=kwargs.get('proteins'),
-        carbs=kwargs.get('carbs'),
-        fats=kwargs.get('fats'),
-        fiber=kwargs.get('fiber'),
-        salt=kwargs.get('salt'),
-        sat_fats=kwargs.get('sat_fats'),
-        sugars=kwargs.get('sugars'),
-        inactive=kwargs.get('inactive'),
-        calories=kwargs.get('calories'),
-        servings=dict_to_food_servings(kwargs.get('servings')),
-        user_id=kwargs.get('user_id'),
-        visibility=kwargs.get('visibility'),
-        source=kwargs.get('source'),
+        id=food.get('id'),
+        name=food.get('name'),
+        proteins=food.get('proteins'),
+        carbs=food.get('carbs'),
+        fats=food.get('fats'),
+        fiber=food.get('fiber'),
+        salt=food.get('salt'),
+        sat_fats=food.get('sat_fats'),
+        sugars=food.get('sugars'),
+        inactive=food.get('inactive'),
+        calories=food.get('calories'),
+        servings=to_food_servings(food.get('servings')),
+        user_id=food.get('user_id'),
+        visibility=food.get('visibility'),
+        source=food.get('source'),
     )
 
 
-def dicts_to_days(arr):
-    return [dict_to_day(**day) for day in arr]
+def to_days(days: list[dict]):
+    return [to_day(**day) for day in days]
 
 
-def dict_to_day(**kwargs):
+def to_day(day):
     return Day(
-        id=kwargs.get('id'),
-        date=datetime.date.fromisoformat(kwargs.get('date')),
-        entries=dict_to_entries(kwargs.get('entries', [])),
-        user_id=kwargs.get('user_id')
+        id=day.get('id'),
+        date=datetime.date.fromisoformat(day.get('date')),
+        entries=to_entries(day.get('entries', [])),
+        user_id=day.get('user_id')
     )
 
 
-def dict_to_entries(arr):
-    return [dict_to_entry(**entry) for entry in arr]
+def to_entries(entries: list[dict]):
+    return [to_entry(**entry) for entry in entries]
 
 
-def dict_to_entry(**kwargs):
+def to_entry(entry: dict):
     return Entry(
-        id=kwargs.get('id'),
-        rank=kwargs.get('rank'),
-        food_id=kwargs.get('food_id'),
-        amount=kwargs.get('amount'),
-        day_id=kwargs.get('day_id'),
-        serving_id=kwargs.get('serving_id'),
-        course_id=kwargs.get('course_id'),
+        id=entry.get('id'),
+        rank=entry.get('rank'),
+        food_id=entry.get('food_id'),
+        amount=entry.get('amount'),
+        day_id=entry.get('day_id'),
+        serving_id=entry.get('serving_id'),
+        course_id=entry.get('course_id'),
+    )
+
+
+def to_ingredients(ingredients: list[dict]):
+    return [to_ingredient(**ingredient) for ingredient in ingredients]
+
+
+def to_ingredient(ingredient: dict):
+    return Ingredient(
+        id=ingredient.get('id'),
+        rank=ingredient.get('rank'),
+        amount=ingredient.get('amount'),
+        dish_id=ingredient.get('dish_id'),
+        food_id=ingredient.get('food_id'),
+        serving_id=ingredient.get('serving_id'),
+    )
+
+
+def to_dishes(dishes: list[dict]):
+    return [to_dish(dish) for dish in dishes]
+
+
+def to_dish(dish: dict):
+    return Dish(
+        id=dish.get('id'),
+        name=datetime.date.fromisoformat(dish.get('name')),
+        ingredients=to_ingredients(dish.get('ingredients', [])),
+        servings=to_food_servings(dish.get('servings')),
+        user_id=dish.get('user_id'),
     )
 
 

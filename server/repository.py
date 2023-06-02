@@ -1,7 +1,7 @@
 from sqlalchemy import delete, select, update
 from sqlalchemy.orm import Session
 
-from model import Day, Food, Entry, FoodServing, User
+from model import Day, Food, Entry, FoodServing, User, Dish
 from __main__ import scoped_factory
 
 
@@ -99,3 +99,24 @@ def upsert_user(user: User):
     fresh_user = session.merge(user)
     session.flush()
     return fresh_user
+
+
+def get_dishes():
+    q = select(Dish)
+    r = scoped_factory().scalars(q)
+    return r.unique().all()
+
+
+def upser_dishes(dishes: list[Dish]):
+    session: Session = scoped_factory()
+    fresh_dishes = []
+    for dish in dishes:
+        fresh_dish = session.merge(dish)
+        fresh_dishes.append(fresh_dish)
+    session.flush()
+    return fresh_dishes
+
+
+def delete_dishes(ids):
+    session: Session = scoped_factory()
+    session.query(Dish).where(Dish.id.in_(ids)).delete()

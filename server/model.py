@@ -17,7 +17,8 @@ class FoodServing(Base):
     __tablename__ = 'food_serving_table'
 
     id: Mapped[int] = mapped_column(primary_key=True)
-    food_id: Mapped[int] = mapped_column(ForeignKey("food_table.id"))
+    food_id: Mapped[int] = mapped_column(ForeignKey("food_table.id"), nullable=True)
+    dish_id: Mapped[int] = mapped_column(ForeignKey("dish_table.id"), nullable=True)  # One of food_id or dish_id must be set
     serving_id: Mapped[int] = mapped_column(ForeignKey("serving_table.id"))
     serving: Mapped['Serving'] = relationship(lazy='joined')
 
@@ -51,6 +52,31 @@ class Food(Base):
 
     def __init__(self, **kwargs):
         super().__init__(**{'visibility': 0, **kwargs, 'name_nrm': normalize(kwargs['name'])})
+
+
+@dataclass
+class Dish(Base):
+    __tablename__ = 'dish_table'
+    id: Mapped[int] = mapped_column(primary_key=True)
+    name: Mapped[str] = mapped_column(String(100), nullable=False)
+    name_nrm: Mapped[str] = mapped_column(String(100), nullable=True)
+    user_id: Mapped[int] = mapped_column(nullable=False)
+    servings: Mapped[List['FoodServing']] = relationship(lazy='joined')
+    ingredients: Mapped[List['Ingredient']] = relationship(lazy='selectin', cascade='all, delete-orphan')
+
+    def __init__(self, **kwargs):
+        super().__init__(**{**kwargs, 'name_nrm': normalize(kwargs['name'])})
+
+
+@dataclass
+class Ingredient(Base):
+    __tablename__ = 'ingredient_table'
+    id: Mapped[int] = mapped_column(primary_key=True)
+    rank: Mapped[int] = mapped_column(nullable=True)  # This is the order number because User want to keep order
+    amount: Mapped[int] = mapped_column(nullable=False)
+    dish_id: Mapped[int] = mapped_column(ForeignKey("dish_table.id"))
+    food_id: Mapped[int] = mapped_column(ForeignKey("food_table.id"), nullable=False)
+    serving_id: Mapped[int] = mapped_column(ForeignKey("serving_table.id"), nullable=False)
 
 
 @dataclass

@@ -1,6 +1,8 @@
 const methods = {
+
+    // Foods
+
     async getFoods(ids, name_nrm_contains) {
-        console.log(ids, name_nrm_contains)
         this.$logger.log(ids, name_nrm_contains)
         const response = await this.call({
             method: 'GET',
@@ -29,6 +31,10 @@ const methods = {
         })
         return response.data
     },
+
+
+    // Days
+
     async getDays() {
         this.$logger.log()
         let response = await this.call({
@@ -52,6 +58,24 @@ const methods = {
         })
         return result.data
     },
+
+
+    // Dishes
+
+    async getDishes() {
+        this.$logger.log()
+        const response = await this.call({
+            method: 'GET',
+            url: '/api/dishes',
+            params: {
+            }
+        })
+        return response.data
+    },
+
+
+    // Auth
+
     async login(code, redirect_uri) {
         this.$logger.log(code, redirect_uri)
         const result = await this.call({

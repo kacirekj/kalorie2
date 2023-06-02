@@ -6,13 +6,15 @@ from dataclasses import asdict
 from flask import request, send_file
 from werkzeug.exceptions import Conflict
 
+import mapper
 import repository
 import service
 import util
-from mapper import dict_to_foods, dict_to_entries, dicts_to_days
 
 FILE = 'export_foods.csv'
 
+
+# Days
 
 @app.get('/api/days')
 def get_days():
@@ -23,7 +25,7 @@ def get_days():
 @app.post('/api/days')
 def post_days():
     user_id = util.get_user_id()
-    days = dicts_to_days(request.json)
+    days = mapper.to_days(request.json)
 
     # Auth
     day_ids = [day.id for day in days]
@@ -49,10 +51,12 @@ def delete_day(id):
 
 @app.post('/api/entries')
 def post_entries():
-    entries = dict_to_entries(request.json)
+    entries = mapper.to_entries(request.json)
     entries = repository.upsert_entry(entries)
     return [entry.to_dict() for entry in entries]
 
+
+# Foods
 
 @app.get('/api/foods')
 def get_foods():
@@ -68,7 +72,7 @@ def get_foods():
 @app.post('/api/foods')
 def post_foods():
     user_id = util.get_user_id()
-    foods = dict_to_foods(request.json)
+    foods = mapper.to_foods(request.json)
 
     # Auth
     food_ids = [food.id for food in foods]
@@ -84,6 +88,29 @@ def delete_foods(id):
     repository.delete_foods([id])
     return ''
 
+
+#  Dishes
+
+@app.get('/api/dishes')
+def get_dishes():
+    dishes = repository.get_dishes()
+    return [asdict(dish) for dish in dishes]
+
+
+@app.post('/api/dishes')
+def post_dishes():
+    dishes = mapper.to_dishes(request.json)
+    dishes = repository.upser_dishes(dishes)
+    return [asdict(dish) for dish in dishes]
+
+
+@app.delete('/api/dishes/<id>')
+def delete_dish(id):
+    repository.delete_dishes([id])
+    return ''
+
+
+# Ohter
 
 @app.get('/api/export/foods')
 def get_export_foods():

@@ -7,6 +7,7 @@ const template = `
                     <li><router-link to="/"><img style="height: 2em;" src="web/asset/favicon.png"></router-link></li>
                     <li><router-link class="nav-button" :class="{'nav-button-focus': $route.path == '/days'}" to="/days">Deník</router-link></li>
                     <li><router-link class="nav-button" :class="{'nav-button-focus': $route.path == '/foods'}" to="/foods">Potraviny</router-link></>
+                    <li><router-link class="nav-button" :class="{'nav-button-focus': $route.path == '/dishes'}" to="/dishes">Jídla</router-link></>
 <!--                    <li><router-link class="nav-button" :class="{'nav-button-focus': $route.path == '/tools'}" to="/tools">Nástroje</router-link></li>-->
 <!--                    <li><router-link class="nav-button" :class="{'nav-button-focus': $route.path == '/settings'}" to="/settings">Nastavení</router-link></li>-->
                     <li class="float-right sticky" style="padding-top: 1rem">

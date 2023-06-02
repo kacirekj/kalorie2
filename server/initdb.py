@@ -4,7 +4,7 @@ import csv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 
-from model import Food, Day, Entry, Base, Serving, FoodServing, User
+from model import Food, Day, Entry, Base, Serving, FoodServing, User, Dish, Ingredient
 
 id = 0
 date = datetime.date.today()
@@ -185,6 +185,38 @@ def init():
                 session.merge(e0)
                 session.merge(e1)
                 session.merge(e2)
+
+        # Dish creation
+
+        dish0 = Dish(id=0, name='Čočková polévka s kuřecím masem', user_id=0)
+        dish1 = Dish(id=1, name='Vaječné bílky s brokolicí', user_id=0)
+
+        fs00 = FoodServing(id=100, dish_id=0, serving_id=0)
+        fs01 = FoodServing(id=101, dish_id=0, serving_id=1)
+        fs10 = FoodServing(id=102, dish_id=1, serving_id=0)
+        fs11 = FoodServing(id=103, dish_id=1, serving_id=1)
+
+        ing00 = Ingredient(id=0, dish_id=0, food_id=1, amount=125, serving_id=0)
+        ing01 = Ingredient(id=1, dish_id=0, food_id=2, amount=3, serving_id=3)
+        ing02 = Ingredient(id=2, dish_id=0, food_id=3, amount=160, serving_id=0)
+        ing10 = Ingredient(id=3, dish_id=1, food_id=3, amount=125, serving_id=0)
+        ing11 = Ingredient(id=4, dish_id=1, food_id=2, amount=3, serving_id=3)
+        ing12 = Ingredient(id=5, dish_id=1, food_id=5, amount=160, serving_id=0)
+
+        session.merge(dish0)
+        session.merge(dish1)
+
+        session.merge(fs00)
+        session.merge(fs01)
+        session.merge(fs10)
+        session.merge(fs11)
+
+        session.merge(ing00)
+        session.merge(ing01)
+        session.merge(ing02)
+        session.merge(ing10)
+        session.merge(ing11)
+        session.merge(ing12)
 
         session.commit()
 
