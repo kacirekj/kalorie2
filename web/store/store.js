@@ -2,6 +2,7 @@ const data = {
     alreadySearchedTerms: [],
     foods: [],
     days: [],
+    dishes: [],
     searchTermFood: '',
     courses: {
         0: 'Celý den',
@@ -21,6 +22,11 @@ const computed = {
     foodsById() {
         const res = {}
         data.foods.forEach(f => res[f.id] = f)
+        return res
+    },
+    dishesById() {
+        const res = {}
+        data.dishes.forEach(d => res[d.id] = d)
         return res
     },
     servingsById() {

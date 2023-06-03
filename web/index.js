@@ -17,6 +17,7 @@ import connector from "./service/connector.js";
 import constant from "./service/constant.js";
 import filter from "./service/filter.js";
 import logger from './service/logger.js'
+import model from './service/model.js'
 import util from './service/util.js'
 
 // Store
@@ -29,6 +30,7 @@ import store from './store/store.js'
 import appView from './view/appView.js'
 import dayView from './view/dayView.js'
 import dishView from './view/dishView.js'
+import dishDetailView from './view/dishDetailView.js'
 import foodView from './view/foodView.js'
 import foodDetailView from './view/foodDetailView.js'
 import homeView from "./view/homeView.js";
@@ -55,6 +57,7 @@ Vue.prototype.$connector = connector
 Vue.prototype.$constant = constant
 Vue.prototype.$filter = filter
 Vue.prototype.$logger = logger
+Vue.prototype.$model = model
 Vue.prototype.$util = util
 
 // Store
@@ -69,6 +72,7 @@ const routes = [
     {path: '/', component: homeView},
     {path: '/days', component: dayView},
     {path: '/dishes', component: dishView},
+    {path: '/dishes/:id', component: dishDetailView},
     {path: '/foods', component: foodView},
     {path: '/foods/:id', component: foodDetailView},
     {path: '/tools', component: toolsView},

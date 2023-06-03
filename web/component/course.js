@@ -52,10 +52,10 @@ const template = `
                     </select>
                 </td>
                 <template v-if="Object.keys(entriesGroupByCourseOrderByRank).length > 1">
-                    <td>{{$util.mapEntriesToCalories(entriesGroupByCourseOrderByRank) | roundNutri}}</td>
-                    <td>{{$util.mapEntriesToProteins(entriesGroupByCourseOrderByRank) | roundNutri}}</td>
-                    <td>{{$util.mapEntriesToCarbs(entriesGroupByCourseOrderByRank) | roundNutri}}</td>
-                    <td>{{$util.mapEntriesToFats(entriesGroupByCourseOrderByRank) | roundNutri}}</td>
+                    <td>{{$model.getEntriesNutrient(entriesGroupByCourseOrderByRank, 'calories') | roundNutri}}</td>
+                    <td>{{$model.getEntriesNutrient(entriesGroupByCourseOrderByRank, 'proteins') | roundNutri}}</td>
+                    <td>{{$model.getEntriesNutrient(entriesGroupByCourseOrderByRank, 'carbs') | roundNutri}}</td>
+                    <td>{{$model.getEntriesNutrient(entriesGroupByCourseOrderByRank, 'fats') | roundNutri}}</td>
                 </template>
                 <template v-else>
                     <td>&nbsp</td>

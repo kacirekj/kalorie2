@@ -62,12 +62,13 @@ const methods = {
 
     // Dishes
 
-    async getDishes() {
+    async getDishes(ids) {
         this.$logger.log()
         const response = await this.call({
             method: 'GET',
             url: '/api/dishes',
             params: {
+                ids: [...new Set(ids)],
             }
         })
         return response.data

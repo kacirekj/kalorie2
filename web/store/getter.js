@@ -1,7 +1,7 @@
 const methods = {
     getFood(id) {
         this.$logger.log(id)
-        this.$action.fetchFoodWhereId(id)
+        this.$action.fetchFoodWhereId(id)  // Why? todo
         return this.$store.foodsById[id]
     },
     searchFoods(searchTerm, useUsedFoodsOnly, omitInactiveFoods = true) {
@@ -30,10 +30,15 @@ const methods = {
         }
 
         const storedFoodsResult = collectionToLook
-            .filter(f => this.$util.isFoodNameNrmMatching(f.name_nrm, searchTerm) || f.id == searchTerm)
+            .filter(f => this.$model.isFoodNameNrmMatching(f.name_nrm, searchTerm) || f.id == searchTerm)
             .sort((a, b) => (a.name).localeCompare((b.name)))
 
         return storedFoodsResult;
+    },
+    getDish(id) {
+        this.$logger.log(id)
+        this.$action.fetchDishWhereId(id)
+        return this.$store.dishesById[id]
     },
 }
 export default new Vue({methods})

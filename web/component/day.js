@@ -73,19 +73,19 @@ const template = `
             <tr>
                 <td></td>
                 <td>Celkem:</td>
-                <td>{{$util.mapEntriesToCalories(day.entries) | roundNutri}}</td>
-                <td>{{$util.mapEntriesToProteins(day.entries) | roundNutri}}<small>g</small></td>
-                <td>{{$util.mapEntriesToCarbs(day.entries) | roundNutri}}<small>g</small></td>
-                <td>{{$util.mapEntriesToFats(day.entries) | roundNutri}}<small>g</small></td>
+                <td>{{$model.getEntriesNutrient(day.entries, 'calories') | roundNutri}}</td>
+                <td>{{$model.getEntriesNutrient(day.entries, 'proteins') | roundNutri}}<small>g</small></td>
+                <td>{{$model.getEntriesNutrient(day.entries, 'carbs') | roundNutri}}<small>g</small></td>
+                <td>{{$model.getEntriesNutrient(day.entries, 'fats') | roundNutri}}<small>g</small></td>
                 <td></td>
             </tr>
             <tr>
                 <td></td>
                 <td>Poměr makroživin:</td>
                 <td></td>
-                <td>{{$util.mapEntriesToProteinsPercent(day.entries) | formatPercent}}<small>%</small></td>
-                <td>{{$util.mapEntriesToCarbsPercent(day.entries) | formatPercent}}<small>%</small></td>
-                <td>{{$util.mapEntriesToFatsPercent(day.entries) | formatPercent}}<small>%</small></td>
+                <td>{{macronutrientPercentage.proteins | formatPercent}}<small>%</small></td>
+                <td>{{macronutrientPercentage.carbs | formatPercent}}<small>%</small></td>
+                <td>{{macronutrientPercentage.fats | formatPercent}}<small>%</small></td>
                 <td></td>
             </tr>
             </tfoot>
@@ -108,23 +108,16 @@ export default {
             return this.$getter.searchFoods(this.day.searchTerm)
         },
         entriesGroupByCourse() {
-            let courses = this.day.entries.map(e => e.course_id)
-
-            if (courses.length === 0) {
-                return {'0': []}
-            }
-
-            courses = [...new Set(courses)]
-            const result = {}
-            for (let course_id of courses) {
-                result[course_id] = this.day.entries.filter(e => e.course_id === course_id)
-            }
-            return result
+            let courseIds = this.day.entries.map(e => e.course_id)
+            return [...new Set(courseIds)]
         },
+        macronutrientPercentage() {
+            return this.$model.getEntriesMacronutrientPercent(this.day.entries)
+        }
     },
     methods: {
         saveChanges() {
-            this.day.date = this.date // Prohibit wild chnages of position
+            this.day.date = this.date // Prohibit wild changes of position
             if (this.day.entries.length === 0) {
                 this.$action.deleteDay(this.day)
             } else {

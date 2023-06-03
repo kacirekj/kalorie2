@@ -19,10 +19,10 @@ const template = `
                     <tr>
                         <th class="foodName">
                             <h3 v-if="$store.searchTermFood.length < $constant.SEARCH_T_MIN_LEN">
-                                Naposledy použitá jídla
+                                Naposledy použité potraviny
                             </h3>
                             <h3 v-else>
-                                Nalezená jídla
+                                Nalezené potraviny
                             </h3>
                         </th>
                         <th></th>

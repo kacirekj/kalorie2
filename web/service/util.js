@@ -1,77 +1,4 @@
 const methods = {
-    mapEntriesToCalories(entries) {
-        this.$logger.log()
-        return entries.map(entry => this.mapEntryToCalories(entry))
-            .reduce((d, i) => d + i, 0);
-    },
-    mapEntriesToProteins(entries) {
-        return entries.map(entry => this.mapEntryToProteins(entry))
-            .reduce((d, i) => d + i, 0);
-    },
-    mapEntriesToCarbs(entries) {
-        return entries.map(entry => this.mapEntryToCarbs(entry))
-            .reduce((d, i) => d + i, 0);
-    },
-    mapEntriesToFats(entries) {
-        return entries.map(entry => this.mapEntryToFats(entry))
-            .reduce((d, i) => d + i, 0);
-    },
-    mapEntriesToFatsPercent(entries) {
-        return this.mapEntriesToFats(entries) * 9 / this.mapEntriesToCalories(entries)
-    },
-    mapEntriesToProteinsPercent(entries) {
-        return this.mapEntriesToProteins(entries) * 4 / this.mapEntriesToCalories(entries)
-    },
-    mapEntriesToCarbsPercent(entries) {
-        return this.mapEntriesToCarbs(entries) * 4 / this.mapEntriesToCalories(entries)
-    },
-    mapEntryToCalories(entry, food, serving) {
-        if (!food) {
-            food = this.$store.foodsById[entry.food_id]
-        }
-        if (!serving) {
-            serving = this.$store.servingsById[entry.serving_id]
-        }
-        this.$logger.log()
-        return Math.round(entry.amount * serving.grams / 100 * food.calories);
-    },
-    mapEntryToProteins(entry, food, serving) {
-        if (!food) {
-            food = this.$store.foodsById[entry.food_id]
-        }
-        if (!serving) {
-            serving = this.$store.servingsById[entry.serving_id]
-        }
-        return Math.round(entry.amount * serving.grams / 100 * food.proteins);
-    },
-    mapEntryToCarbs(entry, food, serving) {
-        if (!food) {
-            food = this.$store.foodsById[entry.food_id]
-        }
-        if (!serving) {
-            serving = this.$store.servingsById[entry.serving_id]
-        }
-        return Math.round(entry.amount * serving.grams / 100 * food.carbs);
-    },
-    mapEntryToFats(entry, food, serving) {
-        if (!food) {
-            food = this.$store.foodsById[entry.food_id]
-        }
-        if (!serving) {
-            serving = this.$store.servingsById[entry.serving_id]
-        }
-        return Math.round(entry.amount * serving.grams / 100 * food.fats);
-    },
-    mapFoodToCalories(food) {
-        return Math.round(food.proteins * 4 + food.carbs * 4 + food.fats * 9);
-    },
-    getDateAsString(datetime) {
-        return datetime.toISOString().split('T')[0];
-    },
-    isFoodNameNrmMatching(food_name_nrm, searchTerm) {
-        const terms = searchTerm.toLowerCase().split(' ')
-        return terms.every(t => food_name_nrm.includes(t))
-    },
     getCurrentBrowserUrl() {
         let url = window.location.origin
         return url;
@@ -101,7 +28,7 @@ const methods = {
         return newWindow;
     },
     parseJwt(token) {
-        if(!token) {
+        if (!token) {
             return
         }
         let base64Url = token.split('.')[1];
@@ -114,7 +41,7 @@ const methods = {
     },
     getUserId() {
         const token = this.parseJwt(this.getToken())
-        if(token) {
+        if (token) {
             return token.id
         } else {
             return this.getSessionId()

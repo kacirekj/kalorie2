@@ -5,6 +5,11 @@ const template = `
         </header>
         <main>
             <template v-if="$route.params.id && foodById">
+<!--                                    <h2>-->
+<!--                            <template v-if="!foodById.isEdit">{{foodById.name}}</template>-->
+<!--                            <template v-else><input type="text" v-model="foodById.name"></template>-->
+<!--                        </h2>-->
+
                 <div class="row">
                     <div class="col">
                         <h2>

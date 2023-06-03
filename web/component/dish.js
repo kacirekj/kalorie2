@@ -12,7 +12,7 @@ const template = `
                     </option>
                 </select>
             </td>
-            <td>{{$util.mapEntriesToCalories(dish.ingredients) | formatPercent}}</td>
+<!--            <td>{{$util.mapEntriesToCalories(dish.ingredients) | formatPercent}}</td>-->
             <td></td>
             <td></td>
             <td></td>

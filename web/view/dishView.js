@@ -4,6 +4,7 @@ const template = `
             <h1>Jídla</h1>
         </header>
         <main>
+            <a v-on:click="addFood()"><i class="fa-solid fa-plus"/> Přidat jídlo</a>
             <h2>Vaše jídla</h2>
             <table class="food-table">
                 <colgroup>
@@ -35,7 +36,6 @@ const template = `
                 </template>
                 </tbody>
             </table>
-            <div>{{dishes}}</div>
         </main>
     </div>
 `
@@ -50,6 +50,6 @@ export default {
     },
     async mounted() {
         this.dishes = await this.$connector.getDishes()
-
+        this.$action.fe
     },
 }

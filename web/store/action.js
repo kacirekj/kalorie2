@@ -42,6 +42,14 @@ const methods = {
         this.$mutator.upsertFoods(foods)
         this.$mutator.upsertDays(days)
     },
+    async fetchDishesToStore() {
+        this.$logger.log()
+        const dishes = await this.$connector.getDishes()
+        const foodIds = dishes.flatMap(d => d.ingredients).map(i => i.food_id)
+        const foods = await this.$connector.getFoods(foodIds)
+        this.$mutator.upsertFoods(foods)
+        this.$mutator.upsertDishes(dishes)
+    },
     async fetchFoodsWhereNameNrmContainsToStore(searchTerm) {
         this.$logger.log(searchTerm)
 
@@ -65,12 +73,16 @@ const methods = {
             return
         }
         const foundFood = await this.$connector.getFoods([id], null)
-        console.log(foundFood)
         this.$mutator.upsertFood(foundFood[0])
     },
-    async resetStoreAndFetchEverything() {
-        this.$store.
-        this.fetchDaysToStore()
-    }
+    async fetchDishWhereId(id) {
+        this.$logger.log(id)
+        let dish = this.$store.dishesById[id]
+        if (dish) {
+            return
+        }
+        const foundDishes = await this.$connector.getDishes([id])
+        this.$mutator.upsertDish(foundDishes[0])
+    },
 }
 export default new Vue({methods})

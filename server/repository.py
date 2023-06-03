@@ -101,8 +101,10 @@ def upsert_user(user: User):
     return fresh_user
 
 
-def get_dishes():
+def get_dishes(ids):
     q = select(Dish)
+    if ids:
+        q = q.where(Dish.id.in_(ids))
     r = scoped_factory().scalars(q)
     return r.unique().all()
 

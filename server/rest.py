@@ -93,7 +93,8 @@ def delete_foods(id):
 
 @app.get('/api/dishes')
 def get_dishes():
-    dishes = repository.get_dishes()
+    ids = request.args.getlist('ids[]')
+    dishes = repository.get_dishes(ids)
     return [asdict(dish) for dish in dishes]
 
 

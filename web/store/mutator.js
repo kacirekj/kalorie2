@@ -65,5 +65,23 @@ const methods = {
         this.$logger.log(str)
         return this.$store.foods.filter(food => food.name.toLowerCase().startsWith(str.toLowerCase()))
     },
+    upsertDishes(dishes) {
+        this.$logger.log(foods)
+        return dishes.map(food => this.upsertFood(food))
+    },
+    upsertDish(dish) {
+        this.$logger.log(dish)
+        const existingDish = this.$store.dishes.find(d => d.id === dish.id)
+        if (existingDish) {
+            Object.assign(existingDish, dish)
+            return existingDish;
+        } else {
+            const decoratedDish = {
+                ...dish, // todo
+            }
+            this.$store.dishes.push(decoratedDish);
+            return decoratedDish;
+        }
+    },
 }
 export default new Vue({methods})

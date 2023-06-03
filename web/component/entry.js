@@ -58,17 +58,17 @@ export default {
         serving() {
             return this.food.servings.find(s => s.serving_id === this.entry.serving_id).serving
         },
+        calories() {
+            return this.$model.getEntryNutrient(this.entry, 'calories')
+        },
         proteins() {
-            return this.$util.mapEntryToProteins(this.entry, this.food, this.serving)
+            return this.$model.getEntryNutrient(this.entry, 'proteins')
         },
         carbs() {
-            return this.$util.mapEntryToCarbs(this.entry, this.food, this.serving)
+            return this.$model.getEntryNutrient(this.entry, 'carbs')
         },
         fats() {
-            return this.$util.mapEntryToFats(this.entry, this.food, this.serving)
-        },
-        calories() {
-            return this.$util.mapEntryToCalories(this.entry, this.food, this.serving)
+            return this.$model.getEntryNutrient(this.entry, 'fats')
         },
     },
     methods: {},

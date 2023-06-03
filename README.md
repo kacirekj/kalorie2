@@ -1,5 +1,17 @@
 # kalorie
 
+
+# Strategie
+Nejprve jsou udělány kvalitní kalorické tabulky, které umožní uživatelům zapisovat potraviny, jídla a aktivity.
+Potom, až bude dostatečně velká klientela, může přijít čas na billing.
+Nejprve by se mohl billing jmenovat jako Podpořit a Premium členství, potom by se postupem času mohlo osekat
+pamatování si potravin a záznamů v deníku.
+
+Mohli by se do systému taky nalákat rlzní výživoví specialisté se svými recepty, kteří by si mohli platit zviditelnění
+jejich produktů.
+
+
+
 # Jira
 
 ## Vytvoření kostry fungující aplikace
