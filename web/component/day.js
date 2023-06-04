@@ -30,9 +30,8 @@ const template = `
                 </span>            
             </div>
         </div>
-      
         
-        <template v-for="(course_id, index) in Object.keys(entriesGroupByCourse)">
+        <template v-for="(course_id, index) in courseIds">
             <table class="day-table">
                 <colgroup>
                     <col class="colg-food-name"/>
@@ -100,16 +99,20 @@ export default {
         return {
             day: this.value,
             date: this.value.date,
-
         }
     },
     computed: {
         searchResults() {
             return this.$getter.searchFoods(this.day.searchTerm)
         },
-        entriesGroupByCourse() {
-            let courseIds = this.day.entries.map(e => e.course_id)
-            return [...new Set(courseIds)]
+        courseIds() {
+            let courses = this.day.entries.map(e => e.course_id)
+            let result;
+            if (courses.length === 0) {
+                return [0] // to render at least one course item
+            }
+            result = [...new Set(courses)]
+            return result
         },
         macronutrientPercentage() {
             return this.$model.getEntriesMacronutrientPercent(this.day.entries)

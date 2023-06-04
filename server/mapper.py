@@ -1,4 +1,5 @@
 import datetime
+from typing import List
 
 from model import Day, Entry, Food, Serving, DayExport, FoodServing, Dish, Ingredient
 
@@ -14,7 +15,7 @@ def to_serving(serving: dict):
     )
 
 
-def to_food_servings(servings: list[dict]):
+def to_food_servings(servings: List[dict]):
     return [to_food_serving(food_serving) for food_serving in servings]
 
 
@@ -27,7 +28,7 @@ def to_food_serving(food_serving: dict):
     )
 
 
-def to_foods(foods: list[dict]):
+def to_foods(foods: List[dict]):
     return [to_food(food) for food in foods]
 
 
@@ -51,8 +52,8 @@ def to_food(food: dict):
     )
 
 
-def to_days(days: list[dict]):
-    return [to_day(**day) for day in days]
+def to_days(days: List[dict]):
+    return [to_day(day) for day in days]
 
 
 def to_day(day):
@@ -64,8 +65,8 @@ def to_day(day):
     )
 
 
-def to_entries(entries: list[dict]):
-    return [to_entry(**entry) for entry in entries]
+def to_entries(entries: List[dict]):
+    return [to_entry(entry) for entry in entries]
 
 
 def to_entry(entry: dict):
@@ -80,8 +81,8 @@ def to_entry(entry: dict):
     )
 
 
-def to_ingredients(ingredients: list[dict]):
-    return [to_ingredient(**ingredient) for ingredient in ingredients]
+def to_ingredients(ingredients: List[dict]):
+    return [to_ingredient(ingredient) for ingredient in ingredients]
 
 
 def to_ingredient(ingredient: dict):
@@ -95,7 +96,7 @@ def to_ingredient(ingredient: dict):
     )
 
 
-def to_dishes(dishes: list[dict]):
+def to_dishes(dishes: List[dict]):
     return [to_dish(dish) for dish in dishes]
 
 

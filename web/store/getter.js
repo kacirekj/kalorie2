@@ -37,8 +37,11 @@ const methods = {
     },
     getDish(id) {
         this.$logger.log(id)
-        this.$action.fetchDishWhereId(id)
-        return this.$store.dishesById[id]
+        const dish = this.$store.dishesById[id]
+        if(!dish) {
+            this.$action.fetchDishesToStore()
+        }
+        return dish
     },
 }
 export default new Vue({methods})

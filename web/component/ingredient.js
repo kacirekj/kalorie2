@@ -38,16 +38,16 @@ export default {
             return this.food.servings.find(s => s.serving_id === this.entry.serving_id).serving
         },
         proteins() {
-            return this.$util.mapEntryToProteins(this.entry, this.food, this.serving)
+            return this.$model.getEntryNutrient(this.entry, 'proteins')
         },
         carbs() {
-            return this.$util.mapEntryToCarbs(this.entry, this.food, this.serving)
+            return this.$model.getEntryNutrient(this.entry, 'carbs')
         },
         fats() {
-            return this.$util.mapEntryToFats(this.entry, this.food, this.serving)
+            return this.$model.getEntryNutrient(this.entry, 'fats')
         },
         calories() {
-            return this.$util.mapEntryToCalories(this.entry, this.food, this.serving)
+            return this.$model.getEntryNutrient(this.entry, 'calories')
         },
     },
     methods: {},

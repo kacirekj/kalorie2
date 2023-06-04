@@ -1,11 +1,11 @@
 const template = `
     <div>
         <header class="subheader">
-            <h1>Jídla</h1>
+            <h1>Jídla</h1> 
         </header>
         <main>
             <a v-on:click="addFood()"><i class="fa-solid fa-plus"/> Přidat jídlo</a>
-            <h2>Vaše jídla</h2>
+            <h2>Vaše jídla (Probíhá vývoj)</h2>
             <table class="food-table">
                 <colgroup>
                     <col class="colg-food-name"/>

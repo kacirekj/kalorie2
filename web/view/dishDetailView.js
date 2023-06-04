@@ -9,7 +9,7 @@ const template = `
                     <div class="col">
                         <h2>
                             <template v-if="!dishById.isEdit">{{dishById.name}}</template>
-                            <template v-else><input type="text" v-model="dishById.name"></template>
+<!--                            <template v-else><input type="text" v-model="dishById.name"></template>-->
                         </h2>
                     </div>
                     <div class="col-2" style="text-align: right">
@@ -17,11 +17,11 @@ const template = `
                             <small>
                                 <template v-if="!dishById.isEdit">
                                     <a class="fa-regular fa-pen-to-square"
-                                       v-on:click="foodById.isEdit = !foodById.isEdit"/>
+                                       v-on:click="dishById.isEdit = !dishById.isEdit"/>
                                 </template>
                                 <template v-else>
                                     <a class="fa-solid fa-arrow-rotate-left"
-                                       v-on:click="$action.refreshFood(foodById); foodById.isEdit = !foodById.isEdit"
+                                       v-on:click="$action.refreshDish(foodById); dishById.isEdit = !dishById.isEdit"
                                        title="Vrátit změny"></a>
                                     <a class="fa-regular fa-floppy-disk" v-on:click="saveChanges()"
                                        title="Uložit změny"></a>
@@ -41,35 +41,35 @@ const template = `
                             <tbody>
                             <tr>
                                 <td>Energie <small>(kcal)</small></td>
-                                <td>{{dishById.calories}}</td>
+                                <td>{{$model.getEntriesNutrient(dishById.ingredients, 'calories') | roundNutri}}</td>
                             </tr>
                             <tr>
                                 <td>Bílkoviny <small>(g)</small></td>
-                                <td>{{dishById.proteins}}</td>
+                                <td>{{$model.getEntriesNutrient(dishById.ingredients, 'proteins') | roundNutri}}</td>
                             </tr>
                             <tr>
                                 <td>Sacharidy <small>(g)</small></td>
-                                <td>{{dishById.carbs}}</td>
+                                <td>{{$model.getEntriesNutrient(dishById.ingredients, 'carbs') | roundNutri}}</td>
                             </tr>
                             <tr>
                                 <td>- z toho Cukry <small>(g)</small></td>
-                                <td>{{dishById.sugars}}</td>
+                                <td>{{$model.getEntriesNutrient(dishById.ingredients, 'sugars') | roundNutri}}</td>
                             </tr>
                             <tr>
                                 <td>Tuky <small>(g)</small></td>
-                                <td>{{dishById.fats}}</td>
+                                <td>{{$model.getEntriesNutrient(dishById.ingredients, 'fats') | roundNutri}}</td>
                             </tr>
                             <tr>
                                 <td>- z toho Nasycené mastné kyseliny <small>(g)</small></td>
-                                <td>{{dishById.sat_fats}}</td>
+                                <td>{{$model.getEntriesNutrient(dishById.ingredients, 'sat_fats') | roundNutri}}</td>
                             </tr>
                             <tr>
                                 <td>Vláknina <small>(g)</small></td>
-                                <td>{{dishById.fiber}}</td>
+                                <td>{{$model.getEntriesNutrient(dishById.ingredients, 'fiber') | roundNutri}}</td>
                             </tr>
                             <tr>
                                 <td>Sůl <small>(g)</small></td>
-                                <td>{{dishById.salt}}</td>
+                                <td>{{$model.getEntriesNutrient(dishById.ingredients, 'salt') | roundNutri}}</td>
                             </tr>
                             </tbody>
                         </table>
@@ -152,6 +152,5 @@ export default {
 
     },
     async mounted() {
-
     },
 }

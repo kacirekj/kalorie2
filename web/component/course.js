@@ -79,9 +79,29 @@ export default {
             return this.$getter.searchFoods(this.searchTerm)
         },
         entriesGroupByCourseOrderByRank() {
-            console.log('called')
-            return this.day.entries.filter(e => e.course_id == this.course_id)
+            // let courses = this.day.entries.map(e => e.course_id)
+            //
+            // if (courses.length === 0) {
+            //     return {'0': []}
+            // }
+            //
+            // courses = [...new Set(courses)]
+            // const result = {}
+            // for (let course_id of courses) {
+            //     result[course_id] = this.day.entries.filter(e => e.course_id === course_id)
+            // }
+            // return result
+
+
+            let result = this.day.entries.filter(e => e.course_id == this.course_id)
                 .sort((a, b) => a.rank - b.rank)
+
+            if(result.length === 0) {
+                return []
+            } else {
+                return result;
+            }
+
         },
     },
     methods: {

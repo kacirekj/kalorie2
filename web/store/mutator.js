@@ -66,8 +66,8 @@ const methods = {
         return this.$store.foods.filter(food => food.name.toLowerCase().startsWith(str.toLowerCase()))
     },
     upsertDishes(dishes) {
-        this.$logger.log(foods)
-        return dishes.map(food => this.upsertFood(food))
+        this.$logger.log(dishes)
+        return dishes.map(dish => this.upsertDish(dish))
     },
     upsertDish(dish) {
         this.$logger.log(dish)
@@ -78,6 +78,7 @@ const methods = {
         } else {
             const decoratedDish = {
                 ...dish, // todo
+                isEdit: false,
             }
             this.$store.dishes.push(decoratedDish);
             return decoratedDish;

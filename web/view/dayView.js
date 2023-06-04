@@ -36,7 +36,7 @@ export default {
             date.setDate(date.getDate()-1)
             for(let i = 0; i < 100; i++) {
                 date.setDate(date.getDate()+1)
-                let dateStr = this.$util.getDateAsString(date)
+                let dateStr = this.$model.getDateAsString(date)
                 if(!this.$store.days.find(d => d.date === dateStr)) {
                     break
                 }
@@ -44,7 +44,7 @@ export default {
             }
 
             const addedDay = await this.$action.upsertDay({
-                date: this.$util.getDateAsString(date),
+                date: this.$model.getDateAsString(date),
                 entries: [],
                 user_id: this.$util.getUserId()
             })

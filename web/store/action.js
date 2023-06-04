@@ -75,14 +75,5 @@ const methods = {
         const foundFood = await this.$connector.getFoods([id], null)
         this.$mutator.upsertFood(foundFood[0])
     },
-    async fetchDishWhereId(id) {
-        this.$logger.log(id)
-        let dish = this.$store.dishesById[id]
-        if (dish) {
-            return
-        }
-        const foundDishes = await this.$connector.getDishes([id])
-        this.$mutator.upsertDish(foundDishes[0])
-    },
 }
 export default new Vue({methods})

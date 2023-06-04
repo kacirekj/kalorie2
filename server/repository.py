@@ -1,3 +1,5 @@
+from typing import List
+
 from sqlalchemy import delete, select, update
 from sqlalchemy.orm import Session
 
@@ -5,7 +7,7 @@ from model import Day, Food, Entry, FoodServing, User, Dish
 from __main__ import scoped_factory
 
 
-def get_days(ids=None, user_id=None, date=None, not_id=None) -> list[Day]:
+def get_days(ids=None, user_id=None, date=None, not_id=None) -> List[Day]:
     session = scoped_factory()
     q = select(Day)
     if user_id is not None:
@@ -19,7 +21,7 @@ def get_days(ids=None, user_id=None, date=None, not_id=None) -> list[Day]:
     return session.scalars(q).all()
 
 
-def upsert_days(days: list[Day]):
+def upsert_days(days: List[Day]):
     session = scoped_factory()
     fresh_days = []
     for day in days:
@@ -41,7 +43,7 @@ def delete_day(id):
     scoped_factory().query(Day).where(Day.id.in_([id])).delete()
 
 
-def get_foods(ids: list = None, name_nrm_contains: list = None, user_id: int = None, visibility: int = None, show_popular: bool = None) -> list[Food]:
+def get_foods(ids: List = None, name_nrm_contains: List = None, user_id: int = None, visibility: int = None, show_popular: bool = None) -> List[Food]:
     q = select(Food)
     if ids:
         q = q.where(Food.id.in_(ids))
@@ -62,7 +64,7 @@ def get_foods(ids: list = None, name_nrm_contains: list = None, user_id: int = N
     return r.unique().all()
 
 
-def upsert_foods(foods: list[Food]):
+def upsert_foods(foods: List[Food]):
     session: Session = scoped_factory()
     fresh_foods = []
     for food in foods:
@@ -80,7 +82,7 @@ def delete_foods(ids):
     session.query(Food).where(Food.id.in_(ids)).delete()
 
 
-def upsert_entry(entries: list[Entry]):
+def upsert_entry(entries: List[Entry]):
     session: Session = scoped_factory()
     for entry in entries:
         session.merge(entry)
@@ -109,7 +111,7 @@ def get_dishes(ids):
     return r.unique().all()
 
 
-def upser_dishes(dishes: list[Dish]):
+def upser_dishes(dishes: List[Dish]):
     session: Session = scoped_factory()
     fresh_dishes = []
     for dish in dishes:
