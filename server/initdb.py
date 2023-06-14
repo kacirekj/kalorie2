@@ -4,7 +4,7 @@ import csv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 
-from model import Food, Day, Entry, Base, Serving, FoodServing, User, Dish, Ingredient
+from model import Food, Day, Entry, Base, Serving, FoodServing, User
 
 id = 0
 date = datetime.date.today()
@@ -188,20 +188,20 @@ def init():
 
         # Dish creation
 
-        dish0 = Dish(id=0, name='Čočková polévka s kuřecím masem', user_id=0)
-        dish1 = Dish(id=1, name='Vaječné bílky s brokolicí', user_id=0)
+        dish0 = Food(id=9, type='dish', name='Čočková polévka s kuřecím masem', user_id=0, note='Do hrnce s vodou vsypeme dobře propláchnutou čočku. Vodu osolíme, přidáme bobkový list, kmín, pepř a vaříme asi 40 minut.')
+        dish1 = Food(id=10, type='dish', name='Vaječné bílky s brokolicí', user_id=0)
 
-        fs00 = FoodServing(id=100, dish_id=0, serving_id=0)
-        fs01 = FoodServing(id=101, dish_id=0, serving_id=1)
-        fs10 = FoodServing(id=102, dish_id=1, serving_id=0)
-        fs11 = FoodServing(id=103, dish_id=1, serving_id=1)
+        fs00 = FoodServing(id=100, food_id=9, serving_id=0)
+        fs01 = FoodServing(id=101, food_id=9, serving_id=1)
+        fs10 = FoodServing(id=102, food_id=10, serving_id=0)
+        fs11 = FoodServing(id=103, food_id=10, serving_id=1)
 
-        ing00 = Ingredient(id=0, dish_id=0, food_id=1, amount=125, serving_id=0)
-        ing01 = Ingredient(id=1, dish_id=0, food_id=2, amount=3, serving_id=3)
-        ing02 = Ingredient(id=2, dish_id=0, food_id=3, amount=160, serving_id=0)
-        ing10 = Ingredient(id=3, dish_id=1, food_id=3, amount=125, serving_id=0)
-        ing11 = Ingredient(id=4, dish_id=1, food_id=2, amount=3, serving_id=3)
-        ing12 = Ingredient(id=5, dish_id=1, food_id=5, amount=160, serving_id=0)
+        ing00 = Entry(id=0, dish_id=9, food_id=1, amount=125, serving_id=0)
+        ing01 = Entry(id=1, dish_id=9, food_id=2, amount=3, serving_id=3)
+        ing02 = Entry(id=2, dish_id=9, food_id=3, amount=160, serving_id=0)
+        ing10 = Entry(id=3, dish_id=10, food_id=3, amount=125, serving_id=0)
+        ing11 = Entry(id=4, dish_id=10, food_id=2, amount=3, serving_id=3)
+        ing12 = Entry(id=5, dish_id=10, food_id=5, amount=160, serving_id=0)
 
         session.merge(dish0)
         session.merge(dish1)

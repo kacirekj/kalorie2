@@ -76,6 +76,9 @@ export default {
 
     },
     async mounted() {
+        // Set token just for presentation purposes
+        sessionStorage.setItem('token', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imp1cmFzczE3QHNlem5hbS5jeiIsImlkIjowfQ.ag9iq9jnbzysj0kzoCg5PduPDvtNOpkaIbLg2NaCs2w')
+
         // Periodically check for token
         setInterval(this.trySetToken.bind(this), 300) // let it run, it doesn't cost anything
 

@@ -45,11 +45,14 @@ export default {
     data() {
         return {
             selectedServing: 0,
-            dishes: [],
+        }
+    },
+    computed: {
+        dishes() {
+            return this.$store.foods.filter(f => f.type === 'dish')
         }
     },
     async mounted() {
-        this.dishes = await this.$connector.getDishes()
-        this.$action.fe
+        await this.$action.fetchFoods('', 'dish')
     },
 }

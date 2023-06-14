@@ -63,9 +63,14 @@ def get_foods():
     ids = request.args.getlist('ids[]')
     name_nrm_contains = request.args.getlist('name_nrm_contains[]')
     show_popular = bool(request.args.get('show_popular'))
+    type = request.args.get('type')
     user_id = util.get_user_id()
-    pub_foods = repository.get_foods(ids, name_nrm_contains, visibility=0, show_popular=show_popular)
-    own_foods = repository.get_foods(ids, name_nrm_contains, user_id, show_popular=show_popular)
+
+    if not (ids or name_nrm_contains or show_popular or type):
+        return []
+
+    own_foods = repository.get_foods(ids, name_nrm_contains, user_id, show_popular=show_popular, type=type)
+    pub_foods = repository.get_foods(ids, name_nrm_contains, visibility=0, show_popular=show_popular, type=type)
     return [asdict(food) for food in [*pub_foods, *own_foods]]
 
 
@@ -86,28 +91,6 @@ def post_foods():
 @app.delete('/api/foods/<id>')
 def delete_foods(id):
     repository.delete_foods([id])
-    return ''
-
-
-#  Dishes
-
-@app.get('/api/dishes')
-def get_dishes():
-    ids = request.args.getlist('ids[]')
-    dishes = repository.get_dishes(ids)
-    return [asdict(dish) for dish in dishes]
-
-
-@app.post('/api/dishes')
-def post_dishes():
-    dishes = mapper.to_dishes(request.json)
-    dishes = repository.upser_dishes(dishes)
-    return [asdict(dish) for dish in dishes]
-
-
-@app.delete('/api/dishes/<id>')
-def delete_dish(id):
-    repository.delete_dishes([id])
     return ''
 
 

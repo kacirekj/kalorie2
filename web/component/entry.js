@@ -35,14 +35,14 @@ const template = `
             <td class="">{{proteins | roundNutri}}</td>
             <td class="">{{carbs | roundNutri}}</td>
             <td class="">{{fats | roundNutri}}</td>
-            <td class=""><a class="fa-solid fa-xmark" v-on:click="$mutator.deleteEntry(day, entry)" title="Smazat záznam"></a></td>
+            <td class=""><a class="fa-solid fa-xmark" v-on:click="$emit('delete', entry)" title="Smazat záznam"></a></td>
         </template>
     </tr>
 `
 export default {
     template,
-    props: ['entry', 'day', 'isEdit'],
-    emits: ['input'],
+    props: ['entry', 'isEdit'],
+    emits: ['delete'],
     data() {
         return {}
     },

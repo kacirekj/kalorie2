@@ -38,19 +38,10 @@ const methods = {
         this.$logger.log()
         const days = await this.$connector.getDays()
         const foodIds = days.flatMap(d => d.entries).map(e => e.food_id)
-        const foods = await this.$connector.getFoods(foodIds)
-        this.$mutator.upsertFoods(foods)
+        await this.fetchFoodWhereIds(foodIds)
         this.$mutator.upsertDays(days)
     },
-    async fetchDishesToStore() {
-        this.$logger.log()
-        const dishes = await this.$connector.getDishes()
-        const foodIds = dishes.flatMap(d => d.ingredients).map(i => i.food_id)
-        const foods = await this.$connector.getFoods(foodIds)
-        this.$mutator.upsertFoods(foods)
-        this.$mutator.upsertDishes(dishes)
-    },
-    async fetchFoodsWhereNameNrmContainsToStore(searchTerm) {
+    async fetchFoods(searchTerm, type, noOverride = false) {
         this.$logger.log(searchTerm)
 
         searchTerm = searchTerm.toLowerCase()
@@ -62,18 +53,21 @@ const methods = {
             return
         }
 
-        const foundFoods = await this.$connector.getFoods(null, searchTerm)
-        this.$mutator.upsertFoods(foundFoods)
+        const foundFoods = await this.$connector.getFoods(null, searchTerm, type)
+        this.$mutator.upsertFoods(foundFoods, noOverride)
         this.$store.alreadySearchedTerms.push(searchTerm)
     },
-    async fetchFoodWhereId(id) {
-        this.$logger.log(id)
-        let food = this.$store.foodsById[id]
-        if (food) {
-            return
+    async fetchFoodWhereIds(ids, noOverride) {
+        this.$logger.log(ids)
+        const nonloadedIds = ids.filter(id => !this.$store.foodsById[id])
+        const foundFoods = await this.$connector.getFoods(nonloadedIds, null)
+        const nonloadedIngredientFoodIds = foundFoods.flatMap(f => f.ingredients)
+            .filter(i => !nonloadedIds.includes(i.food_id))
+            .map(i => i.food_id)
+        if(nonloadedIngredientFoodIds.length > 0) {
+            await this.fetchFoodWhereIds(nonloadedIngredientFoodIds)
         }
-        const foundFood = await this.$connector.getFoods([id], null)
-        this.$mutator.upsertFood(foundFood[0])
+        this.$mutator.upsertFoods(foundFoods, noOverride)
     },
 }
 export default new Vue({methods})

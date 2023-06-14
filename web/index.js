@@ -8,6 +8,7 @@ import day from "./component/day.js"
 import dish from "./component/dish.js";
 import entry from "./component/entry.js"
 import food from './component/food.js'
+import foodSearch from "./component/foodSearch.js"
 import ingredient from "./component/ingredient.js"
 import modal from './component/modal.js'
 import searchbox from "./component/searchbox.js";
@@ -30,7 +31,6 @@ import store from './store/store.js'
 import appView from './view/appView.js'
 import dayView from './view/dayView.js'
 import dishView from './view/dishView.js'
-import dishDetailView from './view/dishDetailView.js'
 import foodView from './view/foodView.js'
 import foodDetailView from './view/foodDetailView.js'
 import homeView from "./view/homeView.js";
@@ -48,6 +48,7 @@ Vue.component('day', day)
 Vue.component('dish', dish)
 Vue.component('entry', entry)
 Vue.component('food', food)
+Vue.component('foodsearch', foodSearch)
 Vue.component('ingredient', ingredient)
 Vue.component('modal', modal)
 Vue.component('searchbox', searchbox)
@@ -72,7 +73,7 @@ const routes = [
     {path: '/', component: homeView},
     {path: '/days', component: dayView},
     {path: '/dishes', component: dishView},
-    {path: '/dishes/:id', component: dishDetailView},
+    {path: '/dishes/:id', component: foodDetailView},
     {path: '/foods', component: foodView},
     {path: '/foods/:id', component: foodDetailView},
     {path: '/tools', component: toolsView},

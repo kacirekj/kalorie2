@@ -1,4 +1,14 @@
 const methods = {
+    getFoodNutrient(food, nutrientAttributeName) {
+        if(!food) {
+            return 0
+        }
+        if(food.type === 'food') {
+            return food[nutrientAttributeName]
+        } else {
+            return this.getEntriesNutrientPer100g(food.ingredients, nutrientAttributeName)
+        }
+    },
     getEntriesMacronutrientPercent(entries) {
         const calories = this.getEntriesNutrient(entries, 'calories')
         const proteins = this.getEntriesNutrient(entries, 'proteins')
@@ -15,6 +25,12 @@ const methods = {
         }
         return resultPercentage
     },
+    getEntriesNutrientPer100g(entries, nutrientAttributeName) {
+        const nutrientSum = this.getEntriesNutrient(entries, nutrientAttributeName)
+        const weightSum = entries.map(entry => this.$store.servingsById[entry.serving_id].grams * entry.amount)
+            .reduce((d, i) => d + i, 0);
+        return nutrientSum / (weightSum / 100)
+    },
     getEntriesNutrient(entries, nutrientAttributeName) {
         return entries.map(entry => this.getEntryNutrient(entry, nutrientAttributeName))
             .reduce((d, i) => d + i, 0);
@@ -22,8 +38,8 @@ const methods = {
     getEntryNutrient(entry, nutrientAttributeName) {
         const food = this.$store.foodsById[entry.food_id]
         const serving = this.$store.servingsById[entry.serving_id]
-        const nutrient = food[nutrientAttributeName]
-        return Math.round(entry.amount * serving.grams / 100 * nutrient)
+        const nutrient = this.getFoodNutrient(food, nutrientAttributeName)
+        return entry.amount * serving.grams / 100 * nutrient
     },
     getDateAsString(datetime) {
         return datetime.toISOString().split('T')[0];

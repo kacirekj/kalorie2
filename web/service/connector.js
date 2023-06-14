@@ -2,13 +2,14 @@ const methods = {
 
     // Foods
 
-    async getFoods(ids, name_nrm_contains) {
+    async getFoods(ids, name_nrm_contains, type) {
         this.$logger.log(ids, name_nrm_contains)
         const response = await this.call({
             method: 'GET',
             url: '/api/foods',
             params: {
                 ids: [...new Set(ids)],
+                type: type,
                 name_nrm_contains: name_nrm_contains ? name_nrm_contains.split(' ') : null,
             }
         })
@@ -44,6 +45,7 @@ const methods = {
         return response.data
     },
     async upsertDays(days) {
+        this.$logger.log()
         const result = await this.call({
             method: 'POST',
             url: '/api/days',
@@ -52,26 +54,12 @@ const methods = {
         return result.data
     },
     async deleteDay(day) {
+        this.$logger.log()
         const result = await this.call({
             method: 'DELETE',
             url: '/api/days/' + day.id
         })
         return result.data
-    },
-
-
-    // Dishes
-
-    async getDishes(ids) {
-        this.$logger.log()
-        const response = await this.call({
-            method: 'GET',
-            url: '/api/dishes',
-            params: {
-                ids: [...new Set(ids)],
-            }
-        })
-        return response.data
     },
 
 

@@ -1,7 +1,7 @@
 import datetime
 from typing import List
 
-from model import Day, Entry, Food, Serving, DayExport, FoodServing, Dish, Ingredient
+from model import Day, Entry, Food, Serving, DayExport, FoodServing
 
 
 def to_serving(serving: dict):
@@ -28,6 +28,23 @@ def to_food_serving(food_serving: dict):
     )
 
 
+def to_entries(entries: List[dict]):
+    return [to_entry(entry) for entry in entries]
+
+
+def to_entry(entry: dict):
+    return Entry(
+        id=entry.get('id'),
+        rank=entry.get('rank'),
+        food_id=entry.get('food_id'),
+        amount=entry.get('amount'),
+        serving_id=entry.get('serving_id'),
+        day_id=entry.get('day_id'),
+        course_id=entry.get('course_id'),
+        dish_id=entry.get('dish_id'),
+    )
+
+
 def to_foods(foods: List[dict]):
     return [to_food(food) for food in foods]
 
@@ -35,6 +52,7 @@ def to_foods(foods: List[dict]):
 def to_food(food: dict):
     return Food(
         id=food.get('id'),
+        type=food.get('type'),
         name=food.get('name'),
         proteins=food.get('proteins'),
         carbs=food.get('carbs'),
@@ -49,6 +67,8 @@ def to_food(food: dict):
         user_id=food.get('user_id'),
         visibility=food.get('visibility'),
         source=food.get('source'),
+        note=food.get('note'),
+        ingredients=to_entries(food.get('ingredients')),
     )
 
 
@@ -62,51 +82,6 @@ def to_day(day):
         date=datetime.date.fromisoformat(day.get('date')),
         entries=to_entries(day.get('entries', [])),
         user_id=day.get('user_id')
-    )
-
-
-def to_entries(entries: List[dict]):
-    return [to_entry(entry) for entry in entries]
-
-
-def to_entry(entry: dict):
-    return Entry(
-        id=entry.get('id'),
-        rank=entry.get('rank'),
-        food_id=entry.get('food_id'),
-        amount=entry.get('amount'),
-        day_id=entry.get('day_id'),
-        serving_id=entry.get('serving_id'),
-        course_id=entry.get('course_id'),
-    )
-
-
-def to_ingredients(ingredients: List[dict]):
-    return [to_ingredient(ingredient) for ingredient in ingredients]
-
-
-def to_ingredient(ingredient: dict):
-    return Ingredient(
-        id=ingredient.get('id'),
-        rank=ingredient.get('rank'),
-        amount=ingredient.get('amount'),
-        dish_id=ingredient.get('dish_id'),
-        food_id=ingredient.get('food_id'),
-        serving_id=ingredient.get('serving_id'),
-    )
-
-
-def to_dishes(dishes: List[dict]):
-    return [to_dish(dish) for dish in dishes]
-
-
-def to_dish(dish: dict):
-    return Dish(
-        id=dish.get('id'),
-        name=datetime.date.fromisoformat(dish.get('name')),
-        ingredients=to_ingredients(dish.get('ingredients', [])),
-        servings=to_food_servings(dish.get('servings')),
-        user_id=dish.get('user_id'),
     )
 
 

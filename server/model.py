@@ -18,7 +18,6 @@ class FoodServing(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     food_id: Mapped[int] = mapped_column(ForeignKey("food_table.id"), nullable=True)
-    dish_id: Mapped[int] = mapped_column(ForeignKey("dish_table.id"), nullable=True)  # One of food_id or dish_id must be set
     serving_id: Mapped[int] = mapped_column(ForeignKey("serving_table.id"))
     serving: Mapped['Serving'] = relationship(lazy='joined')
 
@@ -27,13 +26,14 @@ class FoodServing(Base):
 class Food(Base):
     __tablename__ = 'food_table'
     id: Mapped[int] = mapped_column(primary_key=True)
+    type: Mapped[str] = mapped_column(String(20), nullable=False)
     name: Mapped[str] = mapped_column(String(100), nullable=False)
     name_nrm: Mapped[str] = mapped_column(String(100), nullable=True)
 
-    proteins: Mapped[int] = mapped_column(nullable=False)
-    carbs: Mapped[int] = mapped_column(nullable=False)  # Usable carbs (not total carbs)
-    fats: Mapped[int] = mapped_column(nullable=False)
-    calories: Mapped[int] = mapped_column(nullable=False)
+    proteins: Mapped[int] = mapped_column(nullable=True)
+    carbs: Mapped[int] = mapped_column(nullable=True)  # Usable carbs (not total carbs)
+    fats: Mapped[int] = mapped_column(nullable=True)
+    calories: Mapped[int] = mapped_column(nullable=True)
     fiber: Mapped[int] = mapped_column(nullable=True)
     salt: Mapped[int] = mapped_column(nullable=True)
     sat_fats: Mapped[int] = mapped_column(nullable=True)
@@ -44,39 +44,16 @@ class Food(Base):
     servings: Mapped[List['FoodServing']] = relationship(lazy='joined')
     user_id: Mapped[int] = mapped_column(nullable=False)
     visibility: Mapped[int] = mapped_column(nullable=False)  # null or 0 - public (only owner), 1 - private,
+    note: Mapped[str] = mapped_column(nullable=True)
 
-    @staticmethod
-    def normalize_name(name: str):
-        n = name.lower()
-        n = name.translate(str.maketrans('', '', string.punctuation))
-
-    def __init__(self, **kwargs):
-        super().__init__(**{'visibility': 0, **kwargs, 'name_nrm': normalize(kwargs['name'])})
-
-
-@dataclass
-class Dish(Base):
-    __tablename__ = 'dish_table'
-    id: Mapped[int] = mapped_column(primary_key=True)
-    name: Mapped[str] = mapped_column(String(100), nullable=False)
-    name_nrm: Mapped[str] = mapped_column(String(100), nullable=True)
-    user_id: Mapped[int] = mapped_column(nullable=False)
-    servings: Mapped[List['FoodServing']] = relationship(lazy='joined')
-    ingredients: Mapped[List['Ingredient']] = relationship(lazy='selectin', cascade='all, delete-orphan')
+    # Dish
+    ingredients: Mapped[List['Entry']] = relationship(lazy='selectin', cascade='all, delete-orphan', foreign_keys='Entry.dish_id')
 
     def __init__(self, **kwargs):
-        super().__init__(**{**kwargs, 'name_nrm': normalize(kwargs['name'])})
-
-
-@dataclass
-class Ingredient(Base):
-    __tablename__ = 'ingredient_table'
-    id: Mapped[int] = mapped_column(primary_key=True)
-    rank: Mapped[int] = mapped_column(nullable=True)  # This is the order number because User want to keep order
-    amount: Mapped[int] = mapped_column(nullable=False)
-    dish_id: Mapped[int] = mapped_column(ForeignKey("dish_table.id"))
-    food_id: Mapped[int] = mapped_column(ForeignKey("food_table.id"), nullable=False)
-    serving_id: Mapped[int] = mapped_column(ForeignKey("serving_table.id"), nullable=False)
+        super().__init__(**kwargs)
+        self.type = self.type if self.type else 'food'  # or dish
+        self.visibility = self.visibility if self.visibility else 0
+        self.name_nrm = normalize(self.name)
 
 
 @dataclass
@@ -97,10 +74,15 @@ class Entry(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     rank: Mapped[int] = mapped_column(nullable=True)  # This is the order number because User want to keep order
     amount: Mapped[int] = mapped_column(nullable=False)
-    day_id: Mapped[int] = mapped_column(ForeignKey("day_table.id"))
     food_id: Mapped[int] = mapped_column(ForeignKey("food_table.id"), nullable=False)
     serving_id: Mapped[int] = mapped_column(ForeignKey("serving_table.id"), nullable=False)
+
+    # Day entry
+    day_id: Mapped[int] = mapped_column(ForeignKey("day_table.id"), nullable=True)
     course_id: Mapped[int] = mapped_column(nullable=True)  # 0 - all day, 1 - Breakfast, 2 - Snack 1., 3 - Lunch, ...
+
+    # Dish Entry
+    dish_id: Mapped[int] = mapped_column(ForeignKey("food_table.id"), nullable=True)
 
 
 @dataclass

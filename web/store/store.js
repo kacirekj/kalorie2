@@ -2,7 +2,6 @@ const data = {
     alreadySearchedTerms: [],
     foods: [],
     days: [],
-    dishes: [],
     searchTermFood: '',
     courses: {
         0: 'Celý den',

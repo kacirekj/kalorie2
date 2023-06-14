@@ -27,13 +27,18 @@ const methods = {
         this.$logger.log(day)
         this.$store.days = this.$store.days.filter(d => d.id !== day.id)
     },
-    upsertFoods(foods) {
+    upsertFoods(foods, noOverride) {
         this.$logger.log(foods)
-        return foods.map(food => this.upsertFood(food))
+        return foods.map(food => this.upsertFood(food, noOverride))
     },
-    upsertFood(food) {
+    upsertFood(food, noOverride) {
         this.$logger.log(food)
         const existingFood = this.$store.foods.find(f => f.id === food.id)
+
+        if(existingFood && noOverride) {
+            return existingFood
+        }
+
         if (existingFood) {
             Object.assign(existingFood, food)
             return existingFood;
@@ -48,41 +53,34 @@ const methods = {
             return decoratedFood;
         }
     },
-    upsertEntry(day, entry) {
-        this.$logger.log(day, entry)
-        const existingEntry = day.entries.find(e => e.id === entry.id)
+    upsertEntry(entries, entry) {
+        this.$logger.log(entries, entry)
+        const existingEntry = entries.find(e => e.id === entry.id)
         if (existingEntry && entry.id) {
-            Object.assign(day.entries, entry)
+            Object.assign(existingEntry, entry) // it's not called
         } else {
-            day.entries.push(entry)
+            entries.push(entry)
         }
     },
-    deleteEntry(day, entry) {
-        this.$logger.log(day, entry)
-        day.entries = day.entries.filter(e => e !== entry)
+    deleteEntry(entries, entry) {
+        this.$logger.log(entries, entry)
+        this.$util.arrayRemoveIf(entries, e => e.id === entry.id)
     },
     getFoodByNameContaining(str) {
         this.$logger.log(str)
         return this.$store.foods.filter(food => food.name.toLowerCase().startsWith(str.toLowerCase()))
     },
-    upsertDishes(dishes) {
-        this.$logger.log(dishes)
-        return dishes.map(dish => this.upsertDish(dish))
+    addServing(foodDish) {
+        const name = foodDish.newServing.name
+        foodDish.newServing.name = name ? name : 'Bez názvu'
+        foodDish.servings.push({
+            food_id: foodDish.id,
+            serving: {...foodDish.newServing}
+        })
+        foodDish.newServing = {name: '', grams: 100}
     },
-    upsertDish(dish) {
-        this.$logger.log(dish)
-        const existingDish = this.$store.dishes.find(d => d.id === dish.id)
-        if (existingDish) {
-            Object.assign(existingDish, dish)
-            return existingDish;
-        } else {
-            const decoratedDish = {
-                ...dish, // todo
-                isEdit: false,
-            }
-            this.$store.dishes.push(decoratedDish);
-            return decoratedDish;
-        }
+    removeServing(serving) {
+        serving.inactive = true;
     },
 }
 export default new Vue({methods})

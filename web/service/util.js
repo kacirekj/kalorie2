@@ -55,6 +55,13 @@ const methods = {
     },
     getRandomStr() {
         return Math.random().toString(36).substr(2, 10)
+    },
+    arrayRemoveIf(array, predicate) {
+        for (let i = 0; i < array.length; i++) {
+            if (predicate(array[i])) {
+                return array.splice(i, 1);
+            }
+        }
     }
 
 }

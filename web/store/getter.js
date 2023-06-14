@@ -1,7 +1,7 @@
 const methods = {
     getFood(id) {
         this.$logger.log(id)
-        this.$action.fetchFoodWhereId(id)  // Why? todo
+        this.$action.fetchFoodWhereIds([id], true)  // Why? todo
         return this.$store.foodsById[id]
     },
     searchFoods(searchTerm, useUsedFoodsOnly, omitInactiveFoods = true) {
@@ -11,7 +11,7 @@ const methods = {
         if (searchTerm.length < this.$constant.SEARCH_T_MIN_LEN || useUsedFoodsOnly) {
             result = this.getFoodsWhereNameNrmContains(searchTerm, true)
         } else {
-            this.$action.fetchFoodsWhereNameNrmContainsToStore(searchTerm) // Async! This method shall be used only in Computed!
+            this.$action.fetchFoods(searchTerm, null, true) // Async! This method shall be used only in Computed!
             result = this.getFoodsWhereNameNrmContains(searchTerm, false)
         }
 
@@ -35,13 +35,6 @@ const methods = {
 
         return storedFoodsResult;
     },
-    getDish(id) {
-        this.$logger.log(id)
-        const dish = this.$store.dishesById[id]
-        if(!dish) {
-            this.$action.fetchDishesToStore()
-        }
-        return dish
-    },
+
 }
 export default new Vue({methods})

@@ -3,7 +3,7 @@ from typing import List
 from sqlalchemy import delete, select, update
 from sqlalchemy.orm import Session
 
-from model import Day, Food, Entry, FoodServing, User, Dish
+from model import Day, Food, Entry, FoodServing, User
 from __main__ import scoped_factory
 
 
@@ -43,10 +43,12 @@ def delete_day(id):
     scoped_factory().query(Day).where(Day.id.in_([id])).delete()
 
 
-def get_foods(ids: List = None, name_nrm_contains: List = None, user_id: int = None, visibility: int = None, show_popular: bool = None) -> List[Food]:
+def get_foods(ids: List = None, name_nrm_contains: List = None, user_id: int = None, visibility: int = None, show_popular: bool = None, type: str = None) -> List[Food]:
     q = select(Food)
     if ids:
         q = q.where(Food.id.in_(ids))
+    if type:
+        q = q.where(Food.type == type)
     if name_nrm_contains:
         for s in name_nrm_contains:
             q = q.where(Food.name_nrm.contains(s))
@@ -101,26 +103,3 @@ def upsert_user(user: User):
     fresh_user = session.merge(user)
     session.flush()
     return fresh_user
-
-
-def get_dishes(ids):
-    q = select(Dish)
-    if ids:
-        q = q.where(Dish.id.in_(ids))
-    r = scoped_factory().scalars(q)
-    return r.unique().all()
-
-
-def upser_dishes(dishes: List[Dish]):
-    session: Session = scoped_factory()
-    fresh_dishes = []
-    for dish in dishes:
-        fresh_dish = session.merge(dish)
-        fresh_dishes.append(fresh_dish)
-    session.flush()
-    return fresh_dishes
-
-
-def delete_dishes(ids):
-    session: Session = scoped_factory()
-    session.query(Dish).where(Dish.id.in_(ids)).delete()

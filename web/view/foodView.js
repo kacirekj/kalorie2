@@ -82,7 +82,7 @@ export default {
         if (!this.id) {
             await this.$action.fetchDaysToStore()
         } else {
-            await this.$action.fetchFoodWhereId(this.id)
+            await this.$action.fetchFoodWhereIds([this.id])
         }
     }
 }
