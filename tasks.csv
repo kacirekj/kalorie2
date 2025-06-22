@@ -1,12 +1,11 @@
 ﻿Tag,Task name,Priority,Estimate [d],Time spent [d],"Status [Progress, Done]",Description
-Activities,There is page with Activities,3,3,,Do,
+Activities,There is page with Activities,3,3,0.5,Do,
 Activities,Activity can be added to Diary,3,3,,Do,But is question how - by food search?
 Account,Login via Google,3,2,,Do,
 Data,Common foods are copied from Kaloricke Tabulky or My Fitness Pal,3,4,,Do,They will be slightly modified so nobody can tell source
-Diary,Notify User about Merge when it is goind to happen,2,1,,Do,When Changing date to existing. But why it is so important?
-Dishes,User can create Dish as a combination of Foods,3,2,2.7,Do,"It will work on similar bases as Foods card, so there will be Add new Dish with redirection to new page. It needs specific Dish amount calculations"
 Dishes,Dish serving contains also entire amount of used ingredients.,3,0.5,,Do,
 Dishes,User can add dishes into his Diary,3,0.5,,Do,
+Diary,Notify User about Merge when it is goind to happen,2,1,,Do,When Changing date to existing. But why it is so important?
 Foods,Serving don't need to have binding table,2,0.5,,Do,"I think that it only complicates things, because there are only 1g and 100g, not need to have binding becouse of 2 rows"
 Foods,Food search could contain diacritics,2,0.5,,Do,
 Foods,Food contains pictures,2,2,,Do,
@@ -27,6 +26,7 @@ Account,User can set what nutrients are displayed in Diary,1,2,,Do,
 Account,User can set if wants to display Macronutriend ratio in Diary,1,1,,Do,
 Account,User can set what dishes he wants to display,1,1,,Do,And if noone then panel Option disappear
 Account,User can set Text height,1,1,,Do,
+Dishes,User can create Dish as a combination of Foods,3,2,6.5,Done,Tohle bylo fakt přetažené. V podstatě jsem si tím hrál. Měl jsem vzít první fungující řešení.
 Foods,User can create new food,3,2,1,Done,This still isn't completed. Also user should be able to delete food.
 Diary,Calculate Day summary properly for each Course,3,0.5,0.25,Done,"Nefunguje tam pocitani, N/A u makronutrientu, a zvazit pouziti jednotek ""g"""
 Diary,Changing date of a Day should not move it's position,3,1,0.5,Done,
@@ -37,6 +37,6 @@ Diary,"When adding new Day, increment Date if same Date already exists",3,0.5,1,
 Diary,"When food is added to different Course, old Course should change to original",2,0.5,0.35,Done,
 Diary,Food Entries can be dragged and dropped,2,2,1.5,Done,
 Foods,"When no Recent foods exists, showup Popular foods",3,0.5,,Progress,Could be also resolved in a way to have imcplicit Day entry with many basic foods added
-Diary,Show Help questionmark in each page to tell user what it is doing,1,0.5,,,
-,,,,,,
+Diary,Show Help questionmark in each page to tell user what it is doing,1,0.5,,Do,
+Total,Nez jsem zacal psat Jiru,,10,10,Done,
 , ,,,,,

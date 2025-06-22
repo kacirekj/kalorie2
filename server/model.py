@@ -18,6 +18,7 @@ class FoodServing(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True)
     food_id: Mapped[int] = mapped_column(ForeignKey("food_table.id"), nullable=True)
+    activity_id: Mapped[int] = mapped_column(ForeignKey("activity_table.id"), nullable=True)
     serving_id: Mapped[int] = mapped_column(ForeignKey("serving_table.id"))
     serving: Mapped['Serving'] = relationship(lazy='joined')
 
@@ -30,14 +31,15 @@ class Food(Base):
     name: Mapped[str] = mapped_column(String(100), nullable=False)
     name_nrm: Mapped[str] = mapped_column(String(100), nullable=True)
 
-    proteins: Mapped[int] = mapped_column(nullable=True)
-    carbs: Mapped[int] = mapped_column(nullable=True)  # Usable carbs (not total carbs)
-    fats: Mapped[int] = mapped_column(nullable=True)
-    calories: Mapped[int] = mapped_column(nullable=True)
-    fiber: Mapped[int] = mapped_column(nullable=True)
-    salt: Mapped[int] = mapped_column(nullable=True)
-    sat_fats: Mapped[int] = mapped_column(nullable=True)
-    sugars: Mapped[int] = mapped_column(nullable=True)
+    # Food
+    proteins: Mapped[float] = mapped_column(nullable=True)
+    carbs: Mapped[float] = mapped_column(nullable=True)  # Usable carbs (not total carbs)
+    fats: Mapped[float] = mapped_column(nullable=True)
+    calories: Mapped[float] = mapped_column(nullable=True)
+    fiber: Mapped[float] = mapped_column(nullable=True)
+    salt: Mapped[float] = mapped_column(nullable=True)
+    sat_fats: Mapped[float] = mapped_column(nullable=True)
+    sugars: Mapped[float] = mapped_column(nullable=True)
 
     source: Mapped[str] = mapped_column(String(200), nullable=True)
     inactive: Mapped[bool] = mapped_column(nullable=True)
@@ -74,8 +76,13 @@ class Entry(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
     rank: Mapped[int] = mapped_column(nullable=True)  # This is the order number because User want to keep order
     amount: Mapped[int] = mapped_column(nullable=False)
-    food_id: Mapped[int] = mapped_column(ForeignKey("food_table.id"), nullable=False)
     serving_id: Mapped[int] = mapped_column(ForeignKey("serving_table.id"), nullable=False)
+
+    # Activity entry
+    activity_id: Mapped[int] = mapped_column(ForeignKey("activity_table.id"), nullable=True)
+
+    # Food entry
+    food_id: Mapped[int] = mapped_column(ForeignKey("food_table.id"), nullable=True)
 
     # Day entry
     day_id: Mapped[int] = mapped_column(ForeignKey("day_table.id"), nullable=True)
@@ -103,6 +110,24 @@ class User(Base):
     created: Mapped[datetime.datetime] = mapped_column(nullable=True)
     last_visit: Mapped[datetime.datetime] = mapped_column(nullable=True)
     fingerprint: Mapped[str] = mapped_column(nullable=True)
+
+
+@dataclass
+class Activity(Base):
+    __tablename__ = 'activity_table'
+    id: Mapped[int] = mapped_column(primary_key=True)
+    type: Mapped[str] = mapped_column(String(20), nullable=False)
+    name: Mapped[str] = mapped_column(String(100), nullable=False)
+    name_nrm: Mapped[str] = mapped_column(String(100), nullable=True)
+
+    met: Mapped[float] = mapped_column(nullable=True)  # Kcal kg hour
+
+    source: Mapped[str] = mapped_column(String(200), nullable=True)
+    inactive: Mapped[bool] = mapped_column(nullable=True)
+    servings: Mapped[List['FoodServing']] = relationship(lazy='joined')
+    user_id: Mapped[int] = mapped_column(nullable=False)
+    visibility: Mapped[int] = mapped_column(nullable=False)  # null or 0 - public (only owner), 1 - private,
+    note: Mapped[str] = mapped_column(nullable=True)
 
 
 @dataclass

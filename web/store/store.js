@@ -11,7 +11,6 @@ const data = {
         4: 'Odpolední svačina',
         5: 'Večeře',
         6: 'Večeře 2'
-
     }
 }
 const computed = {

@@ -180,6 +180,16 @@ const template = `
                                 <td>&nbsp</td>
                             </template>
                         </tr>
+                                    <tr>
+                <td></td>
+                <td>Poměr makroživin:</td>
+                <td></td>
+                <td>{{macronutrientPercentage.proteins | formatPercent}}<small>%</small></td>
+                <td>{{macronutrientPercentage.carbs | formatPercent}}<small>%</small></td>
+                <td>{{macronutrientPercentage.fats | formatPercent}}<small>%</small></td>
+                <td></td>
+            </tr>
+
                         </tfoot>
                     </table>
                 </div>
@@ -246,6 +256,9 @@ export default {
         },
         foodById() {
             return this.$getter.getFood(this.$route.params.id)
+        },
+        macronutrientPercentage() {
+            return this.$model.getEntriesMacronutrientPercent(this.foodById.ingredients)
         }
     },
     methods: {

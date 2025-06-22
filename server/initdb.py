@@ -4,6 +4,7 @@ import csv
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session
 
+import util
 from model import Food, Day, Entry, Base, Serving, FoodServing, User
 
 id = 0
@@ -248,14 +249,14 @@ def insert_nutri_databaze_cz():
                 carbs = row[' CHOT [g]']
             food = Food(
                 name=row[' OrigFdNm'].strip(),
-                carbs=carbs,
-                proteins=row[' PROT [g]'],
-                fats=row[' FAT [g]'],
-                calories=row[' ENERC [kcal]'],
-                fiber=row[' FIBT [g]'],
+                carbs=util.numerize(carbs),
+                proteins=util.numerize(row[' PROT [g]']),
+                fats=util.numerize(row[' FAT [g]']),
+                calories=util.numerize(row[' ENERC [kcal]']),
+                fiber=util.numerize(row[' FIBT [g]']),
                 salt=None,
-                sat_fats=row[' FASAT [g]'],
-                sugars=row[' SUGAR [g]'],
+                sat_fats=util.numerize(row[' FASAT [g]']),
+                sugars=util.numerize(row[' SUGAR [g]']),
                 servings=[FoodServing(serving_id=0), FoodServing(serving_id=1)],
                 source='NutriDatabaze.cz, verze 7.16, ÚZEI',
                 user_id=0,

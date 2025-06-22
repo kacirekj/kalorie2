@@ -57,3 +57,10 @@ def get_user_id():
 
 def get_request_fingerprint():
     pass
+
+
+def numerize(value):
+    try:
+        return float(value)
+    except:
+        return None

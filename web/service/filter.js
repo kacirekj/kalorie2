@@ -69,6 +69,9 @@ const filters = {
         return Math.round(num )
     },
     roundNutri(num) {
+        if(!num) {
+            return 0
+        }
         const num_r0 = Math.round(num)
         return num_r0;
     },
