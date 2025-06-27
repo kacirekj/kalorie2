@@ -4,23 +4,43 @@ import unicodedata
 from datetime import date
 
 import jwt
-from flask.json import JSONEncoder
+from flask.json.provider import DefaultJSONProvider
 from flask import request
 from unidecode import unidecode
 from werkzeug.exceptions import Unauthorized
+import json
+
+class CustomJSONEncoder(DefaultJSONProvider):
+    def dumps(self, obj, **kwargs):
+        def default(o):
+            try:
+                if isinstance(o, date):
+                    return o.isoformat()
+                iterable = iter(o)
+            except TypeError:
+                pass
+            else:
+                return list(iterable)
+            raise TypeError(f"Object of type {type(o).__name__} is not JSON serializable")
+
+        kwargs.setdefault('default', default)
+        return json.dumps(obj, **kwargs)
+
+    def loads(self, s, **kwargs):
+        return json.loads(s, **kwargs)
 
 
-class CustomJSONEncoder(JSONEncoder):
-    def default(self, obj):
-        try:
-            if isinstance(obj, date):
-                return obj.isoformat()
-            iterable = iter(obj)
-        except TypeError:
-            pass
-        else:
-            return list(iterable)
-        return JSONEncoder.default(self, obj)
+# class CustomJSONEncoder(JSONEncoder):
+#     def default(self, obj):
+#         try:
+#             if isinstance(obj, date):
+#                 return obj.isoformat()
+#             iterable = iter(obj)
+#         except TypeError:
+#             pass
+#         else:
+#             return list(iterable)
+#         return JSONEncoder.default(self, obj)
 
 
 def normalize(s: str):

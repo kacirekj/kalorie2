@@ -4,11 +4,11 @@ from sqlalchemy import delete, select, update
 from sqlalchemy.orm import Session
 
 from model import Day, Food, Entry, FoodServing, User
-from __main__ import scoped_factory
+import context
 
 
 def get_days(ids=None, user_id=None, date=None, not_id=None) -> List[Day]:
-    session = scoped_factory()
+    session = context.scoped_factory()
     q = select(Day)
     if user_id is not None:
         q = q.where(Day.user_id == user_id)
@@ -22,7 +22,7 @@ def get_days(ids=None, user_id=None, date=None, not_id=None) -> List[Day]:
 
 
 def upsert_days(days: List[Day]):
-    session = scoped_factory()
+    session = context.scoped_factory()
     fresh_days = []
     for day in days:
         try:  # Prevent duplicities
@@ -40,7 +40,7 @@ def upsert_days(days: List[Day]):
 
 
 def delete_day(id):
-    scoped_factory().query(Day).where(Day.id.in_([id])).delete()
+    context.scoped_factory().query(Day).where(Day.id.in_([id])).delete()
 
 
 def get_foods(ids: List = None, name_nrm_contains: List = None, user_id: int = None, visibility: int = None, show_popular: bool = None, type: str = None) -> List[Food]:
@@ -62,12 +62,12 @@ def get_foods(ids: List = None, name_nrm_contains: List = None, user_id: int = N
     if visibility is not None:
         q = q.where(Food.visibility == visibility)
 
-    r = scoped_factory().scalars(q)
+    r = context.scoped_factory().scalars(q)
     return r.unique().all()
 
 
 def upsert_foods(foods: List[Food]):
-    session: Session = scoped_factory()
+    session: Session = context.scoped_factory()
     fresh_foods = []
     for food in foods:
         if food.id is None:
@@ -80,12 +80,12 @@ def upsert_foods(foods: List[Food]):
 
 
 def delete_foods(ids):
-    session: Session = scoped_factory()
+    session: Session = context.scoped_factory()
     session.query(Food).where(Food.id.in_(ids)).delete()
 
 
 def upsert_entry(entries: List[Entry]):
-    session: Session = scoped_factory()
+    session: Session = context.scoped_factory()
     for entry in entries:
         session.merge(entry)
     return entries
@@ -95,11 +95,11 @@ def get_users(email: str = None):
     q = select(User)
     if email:
         q = q.where(User.email == email.lower())
-    return scoped_factory().scalars(q).all()
+    return context.scoped_factory().scalars(q).all()
 
 
 def upsert_user(user: User):
-    session: Session = scoped_factory()
+    session: Session = context.scoped_factory()
     fresh_user = session.merge(user)
     session.flush()
     return fresh_user

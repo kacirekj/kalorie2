@@ -1,50 +1,72 @@
+"""
+Import External libraries
+"""
+
 from flask import Flask, send_from_directory, request, redirect, url_for
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
+
+"""
+Import modules
+"""
+
+import context
 import initdb
 import util
-from constant import STATIC_FILE_SUFFIXES, WEB_DIR, DATA_DIR
+import constant
 from util import CustomJSONEncoder
 
+"""
+Configure Flask
+"""
 
-app = Flask(__name__, )
-app.json_encoder = CustomJSONEncoder
+context.app = Flask(__name__, )
+# app.json_encoder = CustomJSONEncoder
 # app.config['JSON_SORT_KEYS'] = False
 # app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False
 
-engine = create_engine(f"sqlite:///{DATA_DIR}/sqlite.db", echo=True)
-session_factory = sessionmaker(bind=engine)
-scoped_factory = scoped_session(session_factory)
 
+"""
+Configure Sql Alchemy
+"""
+
+context.engine = create_engine(f"sqlite:///{constant.DATA_DIR}/sqlite.db", echo=True)
+context.session_factory = sessionmaker(bind=context.engine)
+context.scoped_factory = scoped_session(context.session_factory)
+
+
+"""
+Import modules
+"""
 
 import rest
 import repository
 
 
-@app.route('/')
+@context.app.route('/')
 def get_index():
-    return send_from_directory(WEB_DIR, 'index.html')
+    return send_from_directory(constant.WEB_DIR, 'index.html')
 
 
-@app.route('/<path:text>')
+@context.app.route('/<path:text>')
 def get_index_with(text: str):
     if text == '/':
-        return send_from_directory(WEB_DIR, 'index.html')
+        return send_from_directory(constant.WEB_DIR, 'index.html')
     elif text.startswith('/api'):
         pass
-    elif text.endswith(STATIC_FILE_SUFFIXES):
+    elif text.endswith(constant.STATIC_FILE_SUFFIXES):
         web_file = text.split('web/')[1]
-        return send_from_directory(WEB_DIR, web_file)
+        return send_from_directory(constant.WEB_DIR, web_file)
     else:
-        return send_from_directory(WEB_DIR, 'index.html')  # Should have 404 not found
+        return send_from_directory(constant.WEB_DIR, 'index.html')  # Should have 404 not found
 
 
-@app.teardown_request
+@context.app.teardown_request
 def teardown_request(exception):
     if '/api' not in request.path:
         return
     print('Teardown')
-    session = scoped_factory()
+    session = context.scoped_factory()
     if not exception:
         print('Commit')
         session.commit()
@@ -53,6 +75,7 @@ def teardown_request(exception):
         session.rollback()
     session.close()
 
+application = context.app  # gunicorn needs "application" variable
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=4000)
+    context.app.run(debug=True, host='0.0.0.0', port=4000)

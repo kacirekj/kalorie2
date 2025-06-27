@@ -1,6 +1,6 @@
 import csv
 import dataclasses
-from __main__ import app
+import context
 from dataclasses import asdict
 
 from flask import request, send_file
@@ -16,13 +16,13 @@ FILE = 'export_foods.csv'
 
 # Days
 
-@app.get('/api/days')
+@context.app.get('/api/days')
 def get_days():
     user_id = util.get_user_id()
     return [dataclasses.asdict(day) for day in repository.get_days(user_id=user_id)]
 
 
-@app.post('/api/days')
+@context.app.post('/api/days')
 def post_days():
     user_id = util.get_user_id()
     days = mapper.to_days(request.json)
@@ -43,13 +43,13 @@ def post_days():
     return result
 
 
-@app.delete('/api/days/<id>')
+@context.app.delete('/api/days/<id>')
 def delete_day(id):
     repository.delete_day(id)
     return ''
 
 
-@app.post('/api/entries')
+@context.app.post('/api/entries')
 def post_entries():
     entries = mapper.to_entries(request.json)
     entries = repository.upsert_entry(entries)
@@ -58,7 +58,7 @@ def post_entries():
 
 # Foods
 
-@app.get('/api/foods')
+@context.app.get('/api/foods')
 def get_foods():
     ids = request.args.getlist('ids[]')
     name_nrm_contains = request.args.getlist('name_nrm_contains[]')
@@ -74,7 +74,7 @@ def get_foods():
     return [asdict(food) for food in [*pub_foods, *own_foods]]
 
 
-@app.post('/api/foods')
+@context.app.post('/api/foods')
 def post_foods():
     user_id = util.get_user_id()
     foods = mapper.to_foods(request.json)
@@ -88,7 +88,7 @@ def post_foods():
     return [asdict(food) for food in foods]
 
 
-@app.delete('/api/foods/<id>')
+@context.app.delete('/api/foods/<id>')
 def delete_foods(id):
     repository.delete_foods([id])
     return ''
@@ -96,7 +96,7 @@ def delete_foods(id):
 
 # Ohter
 
-@app.get('/api/export/foods')
+@context.app.get('/api/export/foods')
 def get_export_foods():
     foods = [asdict(food) for food in repository.get_foods(None, None)]
 
@@ -108,7 +108,7 @@ def get_export_foods():
     return send_file(FILE, as_attachment=True)
 
 
-@app.get('/api/login')
+@context.app.get('/api/login')
 def login():
     code = request.args.get('code')
     redirect_uri = request.args.get('redirect_uri')
@@ -116,7 +116,7 @@ def login():
     return token
 
 
-@app.get('/api/users')
+@context.app.get('/api/users')
 def get_users():
     # Temporary unprotected todo
     return [asdict(user) for user in repository.get_users()]
